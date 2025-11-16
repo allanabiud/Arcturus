@@ -8,6 +8,9 @@ public class PauseManager : MonoBehaviour
 {
   private bool isPaused = false;
 
+  [Header("Top Right Pause Button")]
+  public GameObject topRightPauseButton;
+
   [Header("UI Icon Switching")]
   public Image iconImage;
   public Sprite pauseSprite;
@@ -29,6 +32,10 @@ public class PauseManager : MonoBehaviour
     Time.timeScale = 0f;
     isPaused = true;
 
+    // Hide top-right pause button
+    if (topRightPauseButton != null)
+      topRightPauseButton.SetActive(false);
+
     // Switch to "play" icon
     if (iconImage != null)
       iconImage.sprite = playSprite;
@@ -42,6 +49,10 @@ public class PauseManager : MonoBehaviour
   {
     Time.timeScale = 1f;
     isPaused = false;
+
+    // Show top-right pause button again
+    if (topRightPauseButton != null)
+      topRightPauseButton.SetActive(true);
 
     // Switch to "pause" icon
     if (iconImage != null)

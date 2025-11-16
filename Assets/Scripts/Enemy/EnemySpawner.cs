@@ -41,6 +41,10 @@ public class EnemySpawner : MonoBehaviour
   public UnityEngine.UI.Image countdownImage;
   public List<Sprite> countdownSprites;
 
+  [Header("UI Controls")]
+  public GameObject pauseButton;
+
+
   private Camera mainCamera;
   private int currentWaveIndex = 0;
 
@@ -52,6 +56,10 @@ public class EnemySpawner : MonoBehaviour
 
   private IEnumerator StartCountdownAndSpawn()
   {
+    // Disable pause while countdown is active
+    if (pauseButton != null)
+      pauseButton.SetActive(false);
+
     // Stop player from shooting during countdown
     GameState.canPlayerShoot = false;
 
@@ -80,6 +88,10 @@ public class EnemySpawner : MonoBehaviour
 
     countdownImage.gameObject.SetActive(false);
 
+    // Enable pause after countdown
+    if (pauseButton != null)
+      pauseButton.SetActive(true);
+
     // Enable player shooting AFTER countdown finishes
     GameState.canPlayerShoot = true;
 
@@ -103,7 +115,7 @@ public class EnemySpawner : MonoBehaviour
 
     float xMin = mainCamera.transform.position.x - camWidth / 2f + padding;
     float xMax = mainCamera.transform.position.x + camWidth / 2f - padding;
-    float yMin = mainCamera.transform.position.y + camHeight / 4f; // above middle
+    float yMin = mainCamera.transform.position.y + camHeight / 3f; // above middle
     float yMax = mainCamera.transform.position.y + camHeight / 2f - 1.5f; // top half
 
     for (int i = 0; i < wave.totalEnemies; i++)
