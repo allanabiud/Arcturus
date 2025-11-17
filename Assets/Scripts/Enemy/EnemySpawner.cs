@@ -26,9 +26,7 @@ public class EnemySpawner : MonoBehaviour
   [Header("Wave UI")]
   public TMPro.TextMeshProUGUI waveText;
   public float fadeDuration = 0.5f;     // fade in/out time
-  public float visibleDuration = 3f;  // time fully visible
-  public float slideDistance = 300f;   // how far above it starts
-  public float slideDuration = 1.5f;  // same or different from fade
+  public float visibleDuration = 1f;  // time fully visible
 
 
   [Header("Spawn Area Settings")]
@@ -102,8 +100,11 @@ public class EnemySpawner : MonoBehaviour
   {
     if (currentWaveIndex >= waves.Count) yield break;
 
-    // SHOW WAVE TEXT
-    StartCoroutine(ShowWaveText());
+    // Small delay after countdown
+    yield return new WaitForSeconds(0.5f);
+
+    // Show wave text AND wait until fade in/out completes
+    yield return StartCoroutine(ShowWaveText());
 
     Wave wave = waves[currentWaveIndex];
     List<GameObject> spawnedEnemies = new List<GameObject>();
@@ -186,46 +187,30 @@ public class EnemySpawner : MonoBehaviour
     string textToShow = "WAVE " + (currentWaveIndex + 1);
     waveText.text = textToShow;
 
-    RectTransform rect = waveText.rectTransform;
-
-    // Remember original anchored position
-    Vector2 originalPos = rect.anchoredPosition;
-
-    // Start higher (off-position)
-    Vector2 startPos = originalPos + Vector2.up * slideDistance;
-    rect.anchoredPosition = startPos;
-
-    // Start fully transparent
+    // --- START FULLY TRANSPARENT ---
     Color c = waveText.color;
     c.a = 0f;
     waveText.color = c;
 
-    // -------- Fade + Slide In --------
+    // ---------- FADE IN ----------
     float t = 0f;
-    while (t < slideDuration)
+    while (t < fadeDuration)
     {
       t += Time.deltaTime;
-      float progress = t / slideDuration;
-
-      // Move down into place
-      rect.anchoredPosition = Vector2.Lerp(startPos, originalPos, progress);
-
-      // Fade in
-      c.a = Mathf.Lerp(0f, 1f, progress);
+      float a = Mathf.Lerp(0f, 1f, t / fadeDuration);
+      c.a = a;
       waveText.color = c;
-
       yield return null;
     }
 
-    // Ensure exact final state
-    rect.anchoredPosition = originalPos;
+    // Hold fully visible
     c.a = 1f;
     waveText.color = c;
 
-    // -------- Stay Visible --------
+    // ---------- VISIBLE TIME ----------
     yield return new WaitForSeconds(visibleDuration);
 
-    // -------- Fade Out --------
+    // ---------- FADE OUT ----------
     t = 0f;
     while (t < fadeDuration)
     {
@@ -233,12 +218,11 @@ public class EnemySpawner : MonoBehaviour
       float a = Mathf.Lerp(1f, 0f, t / fadeDuration);
       c.a = a;
       waveText.color = c;
-
       yield return null;
     }
 
+    // Hide
     waveText.gameObject.SetActive(false);
   }
-
 }
 
