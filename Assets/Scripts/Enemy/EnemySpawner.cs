@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [System.Serializable]
 public class EnemyType
@@ -13,7 +14,7 @@ public class EnemyType
 public class Wave
 {
   public string waveName;
-  public List<EnemyType> enemiesToSpawn;
+  public List<EnemyType> enemyTypesToSpawn;
   public int totalEnemies;
   public float spawnInterval;
 }
@@ -36,8 +37,9 @@ public class EnemySpawner : MonoBehaviour
 
   [Header("Start Settings")]
   public float startDelay = 3f;       // Countdown duration
-  public UnityEngine.UI.Image countdownImage;
-  public List<Sprite> countdownSprites;
+  public TMPro.TextMeshProUGUI countdownText;
+  // public UnityEngine.UI.Image countdownImage;
+  // public List<Sprite> countdownSprites;
 
   [Header("UI Controls")]
   public GameObject pauseButton;
@@ -63,48 +65,55 @@ public class EnemySpawner : MonoBehaviour
 
     float countdown = startDelay;
 
-    countdownImage.gameObject.SetActive(true);
+    countdownText.gameObject.SetActive(true);
 
     while (countdown > 0)
     {
-      int spriteIndex = Mathf.CeilToInt(countdown) - 1;
+      int displayValue = Mathf.CeilToInt(countdown);
 
-      // Safety check
-      if (spriteIndex >= 0 && spriteIndex < countdownSprites.Count)
-        countdownImage.sprite = countdownSprites[spriteIndex];
+      // Set the text to the number
+      countdownText.text = displayValue.ToString();
 
       yield return new WaitForSeconds(1f);
       countdown -= 1f;
     }
 
-    // Optional GO! image (index 3)
-    if (countdownSprites.Count > 3)
-    {
-      countdownImage.sprite = countdownSprites[3];
-      yield return new WaitForSeconds(1f);
-    }
+    // Display GO!
+    countdownText.text = "GO!";
+    yield return new WaitForSeconds(1f);
 
-    countdownImage.gameObject.SetActive(false);
+    // Hide countdown text
+    countdownText.gameObject.SetActive(false);
 
     // Enable pause after countdown
     if (pauseButton != null)
       pauseButton.SetActive(true);
 
-    // Enable player shooting AFTER countdown finishes
-    GameState.canPlayerShoot = true;
-
+    // Start wave
     StartCoroutine(SpawnWave());
   }
 
   IEnumerator SpawnWave()
   {
-    if (currentWaveIndex >= waves.Count) yield break;
+    if (currentWaveIndex >= waves.Count)
+    {
+      // Trigger victory!
+      GameState.Instance.Victory();
 
-    // Small delay after countdown
+      yield break;
+    }
+
+    // Delay after countdown
     yield return new WaitForSeconds(0.5f);
 
-    // Show wave text AND wait until fade in/out completes
+    // Show wave text and wait until fade in/out completes
     yield return StartCoroutine(ShowWaveText());
+
+    // Update gamestate wave stats
+    GameState.Instance.SetWave(currentWaveIndex + 1);
+
+    // Enable player shooting after WaveText
+    GameState.canPlayerShoot = true;
 
     Wave wave = waves[currentWaveIndex];
     List<GameObject> spawnedEnemies = new List<GameObject>();
@@ -114,14 +123,25 @@ public class EnemySpawner : MonoBehaviour
     float camHeight = 2f * mainCamera.orthographicSize;
     float camWidth = camHeight * mainCamera.aspect;
 
+    float camTop = mainCamera.transform.position.y + camHeight / 2f;
+    float camMiddle = mainCamera.transform.position.y;
+
+    float textReserved = 1.0f; // amount of space at the top you want to block
+
+    // Spawn zone starts below the text
+    float yTopSpawnLimit = camTop - textReserved;
+
+    // Spawn zone bottom moves toward the middle
+    float yBottomSpawnLimit = Mathf.Lerp(yTopSpawnLimit, camMiddle, 0.5f);
+
     float xMin = mainCamera.transform.position.x - camWidth / 2f + padding;
     float xMax = mainCamera.transform.position.x + camWidth / 2f - padding;
-    float yMin = mainCamera.transform.position.y + camHeight / 3f; // above middle
-    float yMax = mainCamera.transform.position.y + camHeight / 2f - 1.5f; // top half
+    float yMin = yBottomSpawnLimit;
+    float yMax = yTopSpawnLimit;
 
     for (int i = 0; i < wave.totalEnemies; i++)
     {
-      EnemyType type = wave.enemiesToSpawn[Random.Range(0, wave.enemiesToSpawn.Count)];
+      EnemyType type = wave.enemyTypesToSpawn[Random.Range(0, wave.enemyTypesToSpawn.Count)];
 
       // Try to find a position that doesn’t overlap
       Vector2 spawnPos2D;
@@ -161,7 +181,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // Delay before next wave
-    yield return new WaitForSeconds(5f);
+    yield return new WaitForSeconds(1f);
 
     currentWaveIndex++;
     StartCoroutine(SpawnWave());
@@ -187,12 +207,12 @@ public class EnemySpawner : MonoBehaviour
     string textToShow = "WAVE " + (currentWaveIndex + 1);
     waveText.text = textToShow;
 
-    // --- START FULLY TRANSPARENT ---
+    // Start fully transparent
     Color c = waveText.color;
     c.a = 0f;
     waveText.color = c;
 
-    // ---------- FADE IN ----------
+    // Fade-In
     float t = 0f;
     while (t < fadeDuration)
     {
@@ -207,10 +227,10 @@ public class EnemySpawner : MonoBehaviour
     c.a = 1f;
     waveText.color = c;
 
-    // ---------- VISIBLE TIME ----------
+    // Time text is visible
     yield return new WaitForSeconds(visibleDuration);
 
-    // ---------- FADE OUT ----------
+    // Fade-Out
     t = 0f;
     while (t < fadeDuration)
     {
@@ -221,7 +241,7 @@ public class EnemySpawner : MonoBehaviour
       yield return null;
     }
 
-    // Hide
+    // Hide WaveText
     waveText.gameObject.SetActive(false);
   }
 }

@@ -9,7 +9,11 @@ public class BasicEnemy : MonoBehaviour
   public Transform firePoint;       // Where the bullet spawns
   public float fireRate = 5f;       // Time between shots
   private float nextFireTime;
-  public float shootingDelay = 0.5f; // Time to wait before shooting after fly-in
+  public float flyInShootingDelay = 0.5f; // Time to wait before shooting after fly-in
+
+  [Header("Health Settings")]
+  public int maxHealth = 3;
+  private int currentHealth;
 
   [HideInInspector]
   public bool canShoot = false; // Only shoot when allowed
@@ -22,11 +26,15 @@ public class BasicEnemy : MonoBehaviour
 
   private IEnumerator WaitThenShoot()
   {
-    yield return new WaitForSeconds(shootingDelay);
+    yield return new WaitForSeconds(flyInShootingDelay);
     canShoot = true;
     nextFireTime = Time.time; // Start shooting immediately after delay
   }
 
+  void Start()
+  {
+    currentHealth = maxHealth;
+  }
 
   void Update()
   {
@@ -41,6 +49,26 @@ public class BasicEnemy : MonoBehaviour
   {
     GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     bullet.GetComponent<Rigidbody2D>().velocity = firePoint.up * 5f; // Bullet moves in firePoint's forward direction
+  }
+
+  public void TakeDamage(int damage)
+  {
+    currentHealth -= damage;
+
+    if (currentHealth <= 0)
+    {
+      Die();
+    }
+  }
+
+  void Die()
+  {
+    // TODO: Add explosion VFX here later
+    Destroy(gameObject);
+
+    // Register enemy death stats
+    GameState.Instance.RegisterEnemyDestroyed();
+
   }
 }
 

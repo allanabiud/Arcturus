@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8681042496493591002}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7467310478187338059}
   - component: {fileID: 2454494231642838530}
   - component: {fileID: 2460270994019669153}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EngineTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4871,13 +4871,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3394227729970566313}
   - component: {fileID: 4026404744856919382}
-  - component: {fileID: 2379498957521218916}
+  - component: {fileID: 5805376706236311843}
   - component: {fileID: 7524020788645142333}
   - component: {fileID: 589386004823966206}
   - component: {fileID: 7345887071061278823}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BasicEnemy
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4951,8 +4951,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &2379498957521218916
-BoxCollider2D:
+--- !u!60 &5805376706236311843
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4993,9 +4993,36 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.99, y: 0.75}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.17721508, y: -0.24886018}
+      - {x: 0.22189806, y: -0.24025285}
+      - {x: 0.24189806, y: -0.19911304}
+      - {x: 0.24886036, y: -0.13721497}
+      - {x: 0.21607538, y: -0.08392454}
+      - {x: 0.18259971, y: -0.07794255}
+      - {x: 0.12538463, y: -0.07198722}
+      - {x: 0.0782925, y: -0.03967953}
+      - {x: 0.02468298, y: 0.20329073}
+      - {x: 0.013835844, y: 0.23849604}
+      - {x: -0.014416931, y: 0.23849604}
+      - {x: -0.07860361, y: -0.03479409}
+      - {x: -0.11621849, y: -0.08252242}
+      - {x: -0.14901574, y: -0.07344091}
+      - {x: -0.19832437, y: -0.081756204}
+      - {x: -0.23805113, y: -0.12337768}
+      - {x: -0.24249235, y: -0.19835097}
+      - {x: -0.19918872, y: -0.24441665}
+      - {x: -0.14100155, y: -0.24955803}
+      - {x: -0.11088686, y: -0.23493594}
+      - {x: -0.07519628, y: -0.19980812}
+      - {x: -0.06772184, y: -0.11831188}
+      - {x: -0.018326242, y: -0.1698702}
+      - {x: 0.013438366, y: -0.16829395}
+      - {x: 0.06531702, y: -0.1263283}
+      - {x: 0.0725321, y: -0.20886019}
+      - {x: 0.11886034, y: -0.24468309}
+  m_UseDelaunayMesh: 0
 --- !u!50 &7524020788645142333
 Rigidbody2D:
   serializedVersion: 4
@@ -5037,8 +5064,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 5910264319991539014, guid: 4db59d0c15e9bf661845860bdcec4248, type: 3}
   firePoint: {fileID: 8681042496493591002}
-  fireRate: 5
+  fireRate: 4
   shootingDelay: 1
+  maxHealth: 3
   canShoot: 0
 --- !u!114 &7345887071061278823
 MonoBehaviour:
