@@ -61,7 +61,7 @@ public class EnemySpawner : MonoBehaviour
       pauseButton.SetActive(false);
 
     // Stop player from shooting during countdown
-    GameState.canPlayerShoot = false;
+    SceneUIManager.canPlayerShoot = false;
 
     float countdown = startDelay;
 
@@ -98,22 +98,22 @@ public class EnemySpawner : MonoBehaviour
     if (currentWaveIndex >= waves.Count)
     {
       // Trigger victory!
-      GameState.Instance.Victory();
+      SceneUIManager.Instance.Victory();
 
       yield break;
     }
 
     // Delay after countdown
-    yield return new WaitForSeconds(0.5f);
+    // yield return new WaitForSeconds(0.5f);
 
     // Show wave text and wait until fade in/out completes
     yield return StartCoroutine(ShowWaveText());
 
     // Update gamestate wave stats
-    GameState.Instance.SetWave(currentWaveIndex + 1);
+    SceneUIManager.Instance.SetWave(currentWaveIndex + 1);
 
     // Enable player shooting after WaveText
-    GameState.canPlayerShoot = true;
+    SceneUIManager.canPlayerShoot = true;
 
     Wave wave = waves[currentWaveIndex];
     List<GameObject> spawnedEnemies = new List<GameObject>();
@@ -143,16 +143,36 @@ public class EnemySpawner : MonoBehaviour
     {
       EnemyType type = wave.enemyTypesToSpawn[Random.Range(0, wave.enemyTypesToSpawn.Count)];
 
-      // Try to find a position that doesn’t overlap
+      // Detect if this enemy will move laterally
+      bool isLevel3 = type.prefab.GetComponent<EnemyLevel3>() != null;
+      // If level 3, adjust xMin/xMax so they never move off screen
+      float safeAmplitude = 0f;
+
+      if (isLevel3)
+      {
+        EnemyLevel3 lvl3 = type.prefab.GetComponent<EnemyLevel3>();
+        safeAmplitude = lvl3.moveAmplitude;
+      }
+
+      float adjustedXMin = xMin + safeAmplitude;
+      float adjustedXMax = xMax - safeAmplitude;
+
       Vector2 spawnPos2D;
       int tries = 0;
+
       do
       {
-        float xPos = Random.Range(xMin, xMax);
+        // Use adjusted range if level 2
+        float xPos = isLevel3 ?
+                     Random.Range(adjustedXMin, adjustedXMax) :
+                     Random.Range(xMin, xMax);
+
         float yPos = Random.Range(yMin, yMax);
         spawnPos2D = new Vector2(xPos, yPos);
+
         tries++;
-      } while (IsOverlapping(spawnPos2D, usedPositions, 1f) && tries < 20); // 1f = minimum spacing
+
+      } while (IsOverlapping(spawnPos2D, usedPositions, 1f) && tries < 20);
 
       usedPositions.Add(spawnPos2D);
 
@@ -204,7 +224,18 @@ public class EnemySpawner : MonoBehaviour
 
     waveText.gameObject.SetActive(true);
 
-    string textToShow = "WAVE " + (currentWaveIndex + 1);
+    int waveNum = currentWaveIndex + 1;
+
+    string textToShow;
+
+    // Special boss waves
+    if (waveNum == 5)
+      textToShow = "BOSS INCOMING!";
+    else if (waveNum == 10)
+      textToShow = "FINAL BOSS!";
+    else
+      textToShow = "WAVE " + waveNum;
+
     waveText.text = textToShow;
 
     // Start fully transparent

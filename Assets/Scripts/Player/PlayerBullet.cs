@@ -8,19 +8,13 @@ public class PlayerBullet : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
-
     if (collision.CompareTag("Enemy"))
     {
-      // Damage enemy
       BasicEnemy enemy = collision.GetComponent<BasicEnemy>();
       if (enemy != null)
-      {
-        enemy.TakeDamage(1); // damage value
-      }
+        enemy.TakeDamage(1);
 
-      // Spawn particles on impact
       Instantiate(hitEffectEnemy, transform.position, Quaternion.identity);
-
       Destroy(gameObject);
     }
   }

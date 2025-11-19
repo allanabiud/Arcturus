@@ -5126,3 +5126,10 @@ MonoBehaviour:
   baseHealth: 2
   maxHealth: 5
   currentHealth: 0
+  upgradeHits: 0
+  healthUIParent: {fileID: 0}
+  fullHealthIconPrefab: {fileID: 8655117126169243890, guid: 6ff306c80058599d7b1c7b10eec99ab9, type: 3}
+  damagedHealthIconPrefab: {fileID: 808620254306978119, guid: 44b9a4e12ef767d53ac5d5ebe4634fd6, type: 3}
+  iconSpacing: 50
+  xOffset: 10
+  yOffset: 10

@@ -20,7 +20,7 @@ public class PlayerShooting : MonoBehaviour
   void Update()
   {
     // Stop shooting while countdown is active
-    if (!GameState.canPlayerShoot)
+    if (!SceneUIManager.canPlayerShoot)
       return;
 
     AutoShoot();

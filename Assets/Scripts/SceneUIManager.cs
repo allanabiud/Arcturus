@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class GameState : MonoBehaviour
+public class SceneUIManager : MonoBehaviour
 {
-  public static GameState Instance;
+  public static SceneUIManager Instance;
 
   [Header("Gameplay Flags")]
   public static bool isGameOver = false;
@@ -29,11 +29,14 @@ public class GameState : MonoBehaviour
 
   private void Awake()
   {
-    Instance = this;
-
-    // Reset static flags when scene starts
-    isGameOver = false;
-    canPlayerShoot = false;
+    if (Instance == null)
+    {
+      Instance = this;
+    }
+    else
+    {
+      Destroy(gameObject);
+    }
   }
 
   public void RegisterEnemyDestroyed()

@@ -7,16 +7,21 @@ public class BasicEnemy : MonoBehaviour
   [Header("Shooting Settings")]
   public GameObject bulletPrefab;   // Bullet to shoot
   public Transform firePoint;       // Where the bullet spawns
-  public float fireRate = 5f;       // Time between shots
+  protected float fireRate = 4f;
   private float nextFireTime;
   public float flyInShootingDelay = 0.5f; // Time to wait before shooting after fly-in
 
   [Header("Health Settings")]
-  public int maxHealth = 3;
-  private int currentHealth;
+  protected int maxHealth = 2;
+  protected int currentHealth;
 
   [HideInInspector]
   public bool canShoot = false; // Only shoot when allowed
+
+  [Header("Pickup Settings")]
+  public GameObject coinPrefab;
+  public float coinDropChance = 0.6f;
+
 
   // Called by EnemyFlyIn when the enemy reaches its target
   public void EnableShooting()
@@ -24,7 +29,7 @@ public class BasicEnemy : MonoBehaviour
     StartCoroutine(WaitThenShoot());
   }
 
-  private IEnumerator WaitThenShoot()
+  protected virtual IEnumerator WaitThenShoot()
   {
     yield return new WaitForSeconds(flyInShootingDelay);
     canShoot = true;
@@ -36,7 +41,7 @@ public class BasicEnemy : MonoBehaviour
     currentHealth = maxHealth;
   }
 
-  void Update()
+  protected virtual void Update()
   {
     if (canShoot && Time.time >= nextFireTime)
     {
@@ -45,7 +50,7 @@ public class BasicEnemy : MonoBehaviour
     }
   }
 
-  void Shoot()
+  protected virtual void Shoot()
   {
     GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     bullet.GetComponent<Rigidbody2D>().velocity = firePoint.up * 5f; // Bullet moves in firePoint's forward direction
@@ -63,11 +68,17 @@ public class BasicEnemy : MonoBehaviour
 
   void Die()
   {
+    // Drop coin
+    if (coinPrefab != null && Random.value <= coinDropChance)
+    {
+      Instantiate(coinPrefab, transform.position, Quaternion.identity);
+    }
+
     // TODO: Add explosion VFX here later
     Destroy(gameObject);
 
     // Register enemy death stats
-    GameState.Instance.RegisterEnemyDestroyed();
+    SceneUIManager.Instance.RegisterEnemyDestroyed();
 
   }
 }

@@ -154,15 +154,9 @@ MonoBehaviour:
   waves:
   - waveName: One
     enemyTypesToSpawn:
-    - name: BasicEnemy
+    - name: basic
       prefab: {fileID: 9140977118572251688, guid: 7c8605066ddda3b7f834b69d261e72cc, type: 3}
-    totalEnemies: 2
-    spawnInterval: 1
-  - waveName: Two
-    enemyTypesToSpawn:
-    - name: BasicEnemy
-      prefab: {fileID: 9140977118572251688, guid: 7c8605066ddda3b7f834b69d261e72cc, type: 3}
-    totalEnemies: 4
+    totalEnemies: 5
     spawnInterval: 1
   waveText: {fileID: 134293853}
   fadeDuration: 0.5
@@ -826,7 +820,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -26.183517, y: 0, z: 2.5099602, w: 0}
+  m_margin: {x: -208.06226, y: 0, z: -176.69415, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1684,35 +1678,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 436668401}
-  - component: {fileID: 436668400}
+  - component: {fileID: 436668402}
   m_Layer: 0
-  m_Name: GameState
+  m_Name: SceneUIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &436668400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 436668399}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f5db2c41876c8ad293440af968385f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameOverPanel: {fileID: 94964828}
-  topRightPauseButton: {fileID: 734737487}
-  currentWaveText: {fileID: 1454445768}
-  enemiesDestroyedText: {fileID: 1373476606}
-  victoryPanel: {fileID: 337269254}
-  victoryWaveText: {fileID: 2036827854}
-  victoryEnemiesText: {fileID: 1090474366}
-  currentWave: 1
-  enemiesDestroyed: 0
 --- !u!4 &436668401
 Transform:
   m_ObjectHideFlags: 0
@@ -1728,6 +1701,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &436668402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 436668399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f293fbbd06eb2193a82f9908042f3f16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverPanel: {fileID: 94964828}
+  topRightPauseButton: {fileID: 734737487}
+  currentWaveText: {fileID: 1454445768}
+  enemiesDestroyedText: {fileID: 1373476606}
+  victoryPanel: {fileID: 337269254}
+  victoryWaveText: {fileID: 2036827854}
+  victoryEnemiesText: {fileID: 1090474366}
+  currentWave: 1
+  enemiesDestroyed: 0
 --- !u!1 &497617188
 GameObject:
   m_ObjectHideFlags: 0
@@ -5497,33 +5491,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
-      propertyPath: xOffset
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
-      propertyPath: yOffset
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
-      propertyPath: iconSpacing
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
-      propertyPath: currentHealth
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
       propertyPath: healthUIParent
       value: 
       objectReference: {fileID: 532799458}
-    - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
-      propertyPath: fullHealthIconPrefab
-      value: 
-      objectReference: {fileID: 8655117126169243890, guid: 6ff306c80058599d7b1c7b10eec99ab9, type: 3}
-    - target: {fileID: 1669225568770164442, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
-      propertyPath: damagedHealthIconPrefab
-      value: 
-      objectReference: {fileID: 808620254306978119, guid: 44b9a4e12ef767d53ac5d5ebe4634fd6, type: 3}
     - target: {fileID: 6810540330054948632, guid: 2cb442b245fd3709cb94fc30427409b0, type: 3}
       propertyPath: m_Name
       value: Player

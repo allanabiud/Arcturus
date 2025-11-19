@@ -16,6 +16,11 @@ public class EnemyBullet : MonoBehaviour
       // Spawn sparks at impact
       Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);
 
+      // Vibrate device (mild vibration)
+#if UNITY_ANDROID || UNITY_IOS
+      Handheld.Vibrate();
+#endif
+
       Destroy(gameObject);
     }
   }

@@ -112,7 +112,7 @@ public class PlayerHealth : MonoBehaviour
     Destroy(gameObject);
 
     // Trigger Game Over
-    GameState.Instance.GameOver();
+    SceneUIManager.Instance.GameOver();
   }
 
   // Optional: add more health via upgrades

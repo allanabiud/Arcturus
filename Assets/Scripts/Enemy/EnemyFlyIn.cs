@@ -8,6 +8,8 @@ public class EnemyFlyIn : MonoBehaviour
   public float speed = 3f;         // Fly-in speed
 
   private bool moving = true;
+  public bool arrived = false;
+
 
   void Update()
   {
@@ -18,12 +20,20 @@ public class EnemyFlyIn : MonoBehaviour
       if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
       {
         transform.position = targetPosition;
+        arrived = true; // fly-in is 100% done
         moving = false; // Stop moving once reached
 
         // Enable shooting when fly-in finishes
         BasicEnemy enemy = GetComponent<BasicEnemy>();
         if (enemy != null)
           enemy.EnableShooting();
+        EnemyLevel2 e2 = GetComponent<EnemyLevel2>();
+        if (e2 != null)
+          e2.EnableShooting();
+        EnemyLevel3 e3 = GetComponent<EnemyLevel3>();
+        if (e3 != null)
+          e3.EnableShooting();
+
       }
     }
   }

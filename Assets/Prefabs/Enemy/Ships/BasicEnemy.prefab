@@ -5062,12 +5062,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52679e0d6dbb44c16a31b8911c87bf4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 5910264319991539014, guid: 4db59d0c15e9bf661845860bdcec4248, type: 3}
+  bulletPrefab: {fileID: 824519610968435795, guid: cd46d390d7cf5ebeb93443e6b15ea56f, type: 3}
   firePoint: {fileID: 8681042496493591002}
-  fireRate: 4
-  shootingDelay: 1
-  maxHealth: 3
+  flyInShootingDelay: 0.5
   canShoot: 0
+  coinPrefab: {fileID: 9175433271067185058, guid: 8675c0198e58eaf04b5deb096698564a, type: 3}
+  coinDropChance: 0.6
 --- !u!114 &7345887071061278823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5082,3 +5082,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPosition: {x: 0, y: 0, z: 0}
   speed: 3
+  arrived: 0
