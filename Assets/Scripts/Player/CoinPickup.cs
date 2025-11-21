@@ -52,6 +52,14 @@ public class CoinPickup : MonoBehaviour
   void Update()
   {
     transform.Translate(Vector3.down * 3f * Time.deltaTime);
+
+    // Destroy when off-screen
+    Vector3 viewportPos = Camera.main.WorldToViewportPoint(transform.position);
+
+    if (viewportPos.y < -0.1f)  // allow some buffer below screen
+    {
+      Destroy(gameObject);
+    }
   }
 }
 

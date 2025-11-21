@@ -5119,7 +5119,7 @@ MonoBehaviour:
   shieldDropCooldown: 5
   lastShieldDropTime: -999
   bossHealth: 20
-  bossFireRate: 0.4
+  bossFireRate: 0.3
   moveAmplitude: 4
   moveSpeed: 2.5
   firePoint1: {fileID: 9050067346840839088}

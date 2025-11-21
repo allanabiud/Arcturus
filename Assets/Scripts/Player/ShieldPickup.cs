@@ -18,7 +18,7 @@ public class ShieldPickup : MonoBehaviour
     float camMiddle = (camTop + camBottom) / 2f;
 
     // Top of bottom half = midpoint between camBottom and camMiddle
-    targetY = camBottom + (camMiddle - camBottom) * 0.6f;
+    targetY = camBottom + (camMiddle - camBottom) * 0.95f;
   }
 
   private void Update()

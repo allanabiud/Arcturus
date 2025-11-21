@@ -186,8 +186,6 @@ MonoBehaviour:
     enemyTypesToSpawn:
     - name: BasicBoss
       prefab: {fileID: 4839731617785970272, guid: e002db2a503f4edfa86fcccfc214b8da, type: 3}
-    - name: Level3
-      prefab: {fileID: 8231025162298630335, guid: 32004102de47d0437bc2d0259046edc2, type: 3}
     totalEnemies: 1
     spawnInterval: 1
   - waveName: Six
@@ -3363,8 +3361,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 736731848}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &1129932722
-CircleCollider2D:
+--- !u!60 &1129932722
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3395,9 +3393,30 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0067642825, y: -0.101463646}
-  serializedVersion: 2
-  m_Radius: 0.76911384
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.43, y: 1.19}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.3280904, y: 0.54738826}
+      - {x: -0.5623208, y: 0.3778599}
+      - {x: -0.72872055, y: 0.04477939}
+      - {x: -0.7320066, y: -0.31005698}
+      - {x: -0.5700467, y: -0.5998444}
+      - {x: 0.60570896, y: -0.5998443}
+      - {x: 0.7328332, y: -0.25596935}
+      - {x: 0.7191658, y: 0.06074232}
+      - {x: 0.58737993, y: 0.33791584}
+      - {x: 0.3229802, y: 0.546126}
+      - {x: 0.016692162, y: 0.6096629}
+  m_UseDelaunayMesh: 0
 --- !u!1 &1135172653
 GameObject:
   m_ObjectHideFlags: 0

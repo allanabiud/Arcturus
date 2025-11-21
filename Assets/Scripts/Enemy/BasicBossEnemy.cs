@@ -6,7 +6,7 @@ public class BasicBossEnemy : BasicEnemy
 {
   [Header("Boss Settings")]
   public int bossHealth = 20;
-  public float bossFireRate = 0.4f;
+  public float bossFireRate = 0.3f;
 
   [Header("Lateral Movement Settings")]
   public float moveAmplitude = 1.5f;
