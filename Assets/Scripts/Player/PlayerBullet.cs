@@ -1,3 +1,4 @@
+// PlayerBullet.cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,19 +13,17 @@ public class PlayerBullet : MonoBehaviour
     {
       BasicEnemy enemy = collision.GetComponent<BasicEnemy>();
       if (enemy != null)
-        enemy.TakeDamage(1);
+        enemy.TakeDamage(1); // Enemy handles shield drop
 
       Instantiate(hitEffectEnemy, transform.position, Quaternion.identity);
       Destroy(gameObject);
     }
   }
 
-  // Update is called once per frame
   void Update()
   {
-    {
-      if (transform.position.y > 8f)
-        Destroy(gameObject);
-    }
+    if (transform.position.y > 8f)
+      Destroy(gameObject);
   }
 }
+

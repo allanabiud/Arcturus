@@ -6,7 +6,7 @@ public class BasicBossEnemy : BasicEnemy
 {
   [Header("Boss Settings")]
   public int bossHealth = 20;
-  public float bossFireRate = 1f;
+  public float bossFireRate = 0.4f;
 
   [Header("Lateral Movement Settings")]
   public float moveAmplitude = 1.5f;
@@ -85,6 +85,25 @@ public class BasicBossEnemy : BasicEnemy
       GameObject bullet2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
       bullet2.GetComponent<Rigidbody2D>().velocity = firePoint1.up * 5f;
     }
+  }
+
+  // Override Die to skip shield drop and always spawn coin
+  protected override void Die(bool droppedShield)
+  {
+    // Always spawn coin on death
+    if (coinPrefab != null)
+    {
+      GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
+      // Set coin value dynamically
+      CoinPickup coinScript = coin.GetComponent<CoinPickup>();
+      if (coinScript != null)
+      {
+        coinScript.coinValue = coinValue;
+      }
+    }
+
+    Destroy(gameObject);
+    SceneUIManager.Instance.RegisterEnemyDestroyed();
   }
 
 }

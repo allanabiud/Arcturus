@@ -5079,7 +5079,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 5323479005545276975, guid: 754a56c7720890d69aba83db2fe76769, type: 3}
   firePoint: {fileID: 5435928573755341236}
-  fireRate: 4
   flyInShootingDelay: 0.5
   canShoot: 0
-  level2Health: 3
+  coinPrefab: {fileID: 9175433271067185058, guid: 8675c0198e58eaf04b5deb096698564a, type: 3}
+  coinDropChance: 0.6
+  coinValue: 2
+  shieldPickupPrefab: {fileID: 612877875156168777, guid: 8108a03ab9730953ab99a34d0f63ab61, type: 3}
+  shieldDropChance: 0.15
+  shieldDropCooldown: 5
+  lastShieldDropTime: -999
+  level2Health: 5
+  level2FireRate: 2.5

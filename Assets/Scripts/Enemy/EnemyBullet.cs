@@ -8,6 +8,13 @@ public class EnemyBullet : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
+    if (collision.CompareTag("Shield"))
+    {
+      // Shield absorbs the bullet
+      Destroy(gameObject);
+      return;
+    }
+
     if (collision.CompareTag("Player"))
     {
       // Damage player

@@ -5111,8 +5111,15 @@ MonoBehaviour:
   firePoint: {fileID: 0}
   flyInShootingDelay: 0.5
   canShoot: 0
-  bossHealth: 20
-  bossFireRate: 0.5
+  coinPrefab: {fileID: 9175433271067185058, guid: 8675c0198e58eaf04b5deb096698564a, type: 3}
+  coinDropChance: 1
+  coinValue: 10
+  shieldPickupPrefab: {fileID: 612877875156168777, guid: 8108a03ab9730953ab99a34d0f63ab61, type: 3}
+  shieldDropChance: 0.5
+  shieldDropCooldown: 5
+  lastShieldDropTime: -999
+  bossHealth: 30
+  bossFireRate: 0.2
   moveAmplitude: 4
   moveSpeed: 3
   firePoint1: {fileID: 3559483655349263332}

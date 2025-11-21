@@ -5,8 +5,8 @@ using UnityEngine;
 public class BossEnemy : BasicEnemy
 {
   [Header("Boss Settings")]
-  public int bossHealth = 20;
-  public float bossFireRate = 1f;
+  public int bossHealth = 30;
+  public float bossFireRate = 0.2f;
 
   [Header("Lateral Movement Settings")]
   public float moveAmplitude = 1.5f;
@@ -82,6 +82,26 @@ public class BossEnemy : BasicEnemy
     {
       GameObject bullet2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
     }
+  }
+
+  // Override Die to skip shield drop and always spawn coin
+  protected override void Die(bool droppedShield)
+  {
+    // Always spawn coin on death
+    if (coinPrefab != null)
+    {
+      GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
+
+      // Set coin value dynamically
+      CoinPickup coinScript = coin.GetComponent<CoinPickup>();
+      if (coinScript != null)
+      {
+        coinScript.coinValue = coinValue;
+      }
+    }
+
+    Destroy(gameObject);
+    SceneUIManager.Instance.RegisterEnemyDestroyed();
   }
 
 }

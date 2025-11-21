@@ -5067,7 +5067,11 @@ MonoBehaviour:
   flyInShootingDelay: 0.5
   canShoot: 0
   coinPrefab: {fileID: 9175433271067185058, guid: 8675c0198e58eaf04b5deb096698564a, type: 3}
-  coinDropChance: 0.6
+  coinDropChance: 0.5
+  shieldPickupPrefab: {fileID: 612877875156168777, guid: 8108a03ab9730953ab99a34d0f63ab61, type: 3}
+  shieldDropChance: 0.1
+  shieldDropCooldown: 5
+  lastShieldDropTime: -999
 --- !u!114 &7345887071061278823
 MonoBehaviour:
   m_ObjectHideFlags: 0

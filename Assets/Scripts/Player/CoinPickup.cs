@@ -4,8 +4,8 @@ using TMPro; // For TextMeshPro
 
 public class CoinPickup : MonoBehaviour
 {
-  public int coinValue = 1;
-  public GameObject coinPrefab; // Prefab with coin icon and text
+  public int coinValue;
+  public GameObject coinPickupTextPrefab;
 
   public float textLifetime = 1f; // How long the text stays
 
@@ -15,20 +15,32 @@ public class CoinPickup : MonoBehaviour
     {
       PersistentGameState.Instance.AddCoins(coinValue);
 
-      if (coinPrefab != null)
+      if (coinPickupTextPrefab != null)
       {
         GameObject canvas = GameObject.Find("Canvas");
+        if (canvas == null) return;
 
-        // Spawn slightly above and to the right
-        Vector3 worldPos = transform.position + new Vector3(0.3f, 0.5f, 0f);
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+        GameObject instance = Instantiate(coinPickupTextPrefab, canvas.transform);
 
-        // Instantiate prefab under Canvas
-        GameObject instance = Instantiate(coinPrefab, canvas.transform);
-        instance.transform.position = screenPos;
-        instance.transform.localScale = Vector3.one;
+        // Set text to coin value
+        // Set coin text
+        TextMeshProUGUI text = instance.transform.Find("coinText")?.GetComponent<TextMeshProUGUI>();
+        if (text != null) text.text = "+" + coinValue;
 
-        // Destroy the prefab after 'textLifetime' seconds
+        // Position on canvas
+        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        RectTransform rt = instance.GetComponent<RectTransform>();
+        Vector2 anchoredPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvasRect,
+            screenPos,
+            canvas.GetComponent<Canvas>().worldCamera,
+            out anchoredPos
+        );
+        rt.anchoredPosition = anchoredPos;
+
+        // Destroy after lifetime
         Destroy(instance, textLifetime);
       }
 

@@ -5076,7 +5076,14 @@ MonoBehaviour:
   firePoint: {fileID: 3276046243783191043}
   flyInShootingDelay: 0.5
   canShoot: 0
-  level3Health: 4
-  level3FireRate: 3
+  coinPrefab: {fileID: 9175433271067185058, guid: 8675c0198e58eaf04b5deb096698564a, type: 3}
+  coinDropChance: 0.6
+  coinValue: 3
+  shieldPickupPrefab: {fileID: 612877875156168777, guid: 8108a03ab9730953ab99a34d0f63ab61, type: 3}
+  shieldDropChance: 0.2
+  shieldDropCooldown: 5
+  lastShieldDropTime: -999
+  level3Health: 7
+  level3FireRate: 1.5
   moveAmplitude: 1.5
   moveSpeed: 2

@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyLevel2 : BasicEnemy
 {
   [Header("Level2 Settings")]
-  public int level2Health = 3;
-  public float level2FireRate = 3f;
+  public int level2Health = 5;
+  public float level2FireRate = 2.5f;
 
   void Start()
   {

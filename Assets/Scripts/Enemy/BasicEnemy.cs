@@ -7,20 +7,30 @@ public class BasicEnemy : MonoBehaviour
   [Header("Shooting Settings")]
   public GameObject bulletPrefab;   // Bullet to shoot
   public Transform firePoint;       // Where the bullet spawns
-  protected float fireRate = 4f;
+  protected float fireRate = 3.5f;
   private float nextFireTime;
   public float flyInShootingDelay = 0.5f; // Time to wait before shooting after fly-in
 
   [Header("Health Settings")]
-  protected int maxHealth = 2;
+  protected int maxHealth = 3;
   protected int currentHealth;
 
   [HideInInspector]
   public bool canShoot = false; // Only shoot when allowed
 
-  [Header("Pickup Settings")]
+  [Header("Coin Drop Settings")]
   public GameObject coinPrefab;
   public float coinDropChance = 0.6f;
+  public int coinValue = 1;
+
+  [Header("Shield Drop Settings")]
+  public GameObject shieldPickupPrefab;
+  public float shieldDropChance = 0.1f;      // chance to drop
+  public float shieldDropCooldown = 5f;      // seconds before the same enemy can drop again
+  public static bool ShieldActiveInScene = false;
+
+  [HideInInspector]
+  public float lastShieldDropTime = -999f;   // track last drop time
 
 
   // Called by EnemyFlyIn when the enemy reaches its target
@@ -60,26 +70,50 @@ public class BasicEnemy : MonoBehaviour
   {
     currentHealth -= damage;
 
+    bool didDropShield = false;
+
+    // Only try to drop shield if enemy survives the hit, cooldown allows, AND no shield already exists
+    if (shieldPickupPrefab != null && CanDropShield() && !ShieldActiveInScene && Random.value <= shieldDropChance)
+    {
+      Instantiate(shieldPickupPrefab, transform.position, Quaternion.identity);
+      RecordShieldDrop();
+      ShieldActiveInScene = true;
+      didDropShield = true;
+    }
+
     if (currentHealth <= 0)
     {
-      Die();
+      Die(didDropShield);
     }
   }
 
-  void Die()
+  protected virtual void Die(bool droppedShield)
   {
-    // Drop coin
-    if (coinPrefab != null && Random.value <= coinDropChance)
+    // Only drop coin if shield was not dropped on this hit
+    if (!droppedShield && coinPrefab != null && Random.value <= coinDropChance)
     {
-      Instantiate(coinPrefab, transform.position, Quaternion.identity);
+      GameObject coin = Instantiate(coinPrefab, transform.position, Quaternion.identity);
+
+      // Set coin value dynamically
+      CoinPickup coinScript = coin.GetComponent<CoinPickup>();
+      if (coinScript != null)
+      {
+        coinScript.coinValue = coinValue;
+      }
     }
 
-    // TODO: Add explosion VFX here later
     Destroy(gameObject);
-
-    // Register enemy death stats
     SceneUIManager.Instance.RegisterEnemyDestroyed();
+  }
 
+  public bool CanDropShield()
+  {
+    return Time.time >= lastShieldDropTime + shieldDropCooldown;
+  }
+
+  public void RecordShieldDrop()
+  {
+    lastShieldDropTime = Time.time;
   }
 }
 

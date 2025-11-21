@@ -5,8 +5,8 @@ using UnityEngine;
 public class SeekingBullet : MonoBehaviour
 {
   [Header("Homing Settings")]
-  public float speed = 4f;          // How fast the bullet moves
-  public float rotateSpeed = 50f;  // Degrees per second
+  public float speed = 3.5f;          // How fast the bullet moves
+  public float rotateSpeed = 60f;  // Degrees per second
 
   private Transform player;
   private Rigidbody2D rb;
@@ -27,14 +27,24 @@ public class SeekingBullet : MonoBehaviour
   {
     if (player != null)
     {
+      // Direction from bullet to player
       Vector2 direction = (player.position - transform.position).normalized;
 
-      float rotateStep = rotateSpeed * Time.deltaTime;
-      float currentAngle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg;
-      float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-      float newAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, rotateStep);
-      Vector2 newDir = new Vector2(Mathf.Cos(newAngle * Mathf.Deg2Rad), Mathf.Sin(newAngle * Mathf.Deg2Rad));
+      // Current velocity direction
+      Vector2 currentDir = rb.velocity.normalized;
+
+      // Calculate the max rotation step (radians)
+      float rotateStep = rotateSpeed * Mathf.Deg2Rad * Time.deltaTime;
+
+      // Smoothly rotate current direction toward target
+      Vector2 newDir = Vector2.Lerp(currentDir, direction, rotateStep).normalized;
+
+      // Apply new velocity
       rb.velocity = newDir * speed;
+
+      // Optional: make bullet face direction
+      float angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg - 90f; // adjust depending on sprite orientation
+      transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     // Destroy if outside camera bounds
@@ -45,8 +55,16 @@ public class SeekingBullet : MonoBehaviour
     }
   }
 
+
   private void OnTriggerEnter2D(Collider2D collision)
   {
+    if (collision.CompareTag("Shield"))
+    {
+      // Shield absorbs the bullet
+      Destroy(gameObject);
+      return;
+    }
+
     if (collision.CompareTag("Player"))
     {
       // Damage player

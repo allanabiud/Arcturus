@@ -50,6 +50,9 @@ public class EnemySpawner : MonoBehaviour
 
   private void Start()
   {
+    Time.timeScale = 1f;
+    currentWaveIndex = 0;
+
     mainCamera = Camera.main;
     StartCoroutine(StartCountdownAndSpawn());
   }

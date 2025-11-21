@@ -4,8 +4,8 @@ using UnityEngine;
 public class EnemyLevel3 : BasicEnemy
 {
   [Header("Level3 Settings")]
-  public int level3Health = 4;
-  public float level3FireRate = 3f;
+  public int level3Health = 7;
+  public float level3FireRate = 1.5f;
 
   [Header("Lateral Movement Settings")]
   public float moveAmplitude = 1.5f;

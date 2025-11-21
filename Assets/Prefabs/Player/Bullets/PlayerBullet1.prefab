@@ -172,3 +172,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffectEnemy: {fileID: 4690787993360163147, guid: 452a2e565a33ca8e7bbbb06dd9cff169, type: 3}
+  shieldPickupPrefab: {fileID: 612877875156168777, guid: 8108a03ab9730953ab99a34d0f63ab61, type: 3}
+  shieldDropChance: 0.4

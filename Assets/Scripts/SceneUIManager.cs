@@ -39,6 +39,20 @@ public class SceneUIManager : MonoBehaviour
     }
   }
 
+  private void Start()
+  {
+    // Reset everything every time GameScene loads
+    Time.timeScale = 1f;
+    isGameOver = false;
+    canPlayerShoot = false;
+
+    enemiesDestroyed = 0;
+    currentWave = 1;
+
+    // Reset static shield flag
+    BasicEnemy.ShieldActiveInScene = false;
+  }
+
   public void RegisterEnemyDestroyed()
   {
     enemiesDestroyed++;
@@ -47,6 +61,16 @@ public class SceneUIManager : MonoBehaviour
   public void SetWave(int waveNumber)
   {
     currentWave = waveNumber;
+  }
+
+  private IEnumerator WaitForCoins(float timeout = 1f)
+  {
+    float timer = timeout;
+    while (timer > 0f && GameObject.FindGameObjectsWithTag("CoinPickup").Length > 0)
+    {
+      timer -= Time.deltaTime;
+      yield return null;
+    }
   }
 
   public void GameOver(float delay = 1f)
@@ -63,6 +87,9 @@ public class SceneUIManager : MonoBehaviour
     // Stop time after delay
     yield return new WaitForSecondsRealtime(delay);
 
+    // Wait for coins to be collected BEFORE freezing time
+    yield return StartCoroutine(WaitForCoins(1f));
+
     // Stop time
     Time.timeScale = 0f;
 
@@ -71,7 +98,6 @@ public class SceneUIManager : MonoBehaviour
 
     // Show game over panel
     gameOverPanel.SetActive(true);
-
     currentWaveText.text = currentWave.ToString();
     enemiesDestroyedText.text = enemiesDestroyed.ToString();
   }
@@ -88,6 +114,9 @@ public class SceneUIManager : MonoBehaviour
     canPlayerShoot = false;
 
     yield return new WaitForSecondsRealtime(delay);
+
+    // Wait for coins
+    yield return StartCoroutine(WaitForCoins(1f));
 
     // Stop time
     Time.timeScale = 0f;
@@ -110,14 +139,25 @@ public class SceneUIManager : MonoBehaviour
 
   private void CleanupObjects()
   {
-    // Destroy enemies
+    // Destroy Player Object
     foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
       Destroy(player);
 
-    // Destroy enemies
+    // Destroy HealthUI
     foreach (GameObject healthUI in GameObject.FindGameObjectsWithTag("HealthUI"))
       Destroy(healthUI);
 
+    // Destroy ShieldUI
+    foreach (GameObject shieldUI in GameObject.FindGameObjectsWithTag("ShieldUI"))
+      Destroy(shieldUI);
+
+    // Destroy CoinPickups
+    foreach (GameObject coinPickup in GameObject.FindGameObjectsWithTag("CoinPickup"))
+      Destroy(coinPickup);
+
+    // Destroy ShieldPickups
+    foreach (GameObject shieldPickup in GameObject.FindGameObjectsWithTag("ShieldPickup"))
+      Destroy(shieldPickup);
 
     // Destroy enemies
     foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))

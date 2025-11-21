@@ -8,6 +8,10 @@ TagManager:
   - Bullet
   - EnemyBullet
   - HealthUI
+  - CoinPickup
+  - ShieldPickup
+  - Shield
+  - ShieldUI
   layers:
   - Default
   - TransparentFX
