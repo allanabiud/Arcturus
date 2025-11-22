@@ -65,10 +65,10 @@ public class SeekingBullet : MonoBehaviour
       return;
     }
 
-    if (collision.CompareTag("Player"))
+    if (collision.transform.root.CompareTag("Player"))
     {
       // Damage player
-      collision.GetComponent<PlayerHealth>()?.TakeDamage(1);
+      collision.GetComponentInParent<PlayerHealth>()?.TakeDamage(1);
 
       // Spawn sparks at impact
       Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);

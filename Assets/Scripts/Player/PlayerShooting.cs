@@ -1,58 +1,66 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerShooting : MonoBehaviour
 {
   public GameObject bulletPrefab;
-  public Transform firePoint;
-
-  [Header("Fire Rate Settings")]
-  public float baseFireRate = 0.6f;     // Starting slow rate
-  public int upgradeLevel = 0;          // Current upgrade level
-  public int maxUpgradeLevel = 5;       // Maximum upgrade level
-  public float upgradeBonusPerLevel = 0.1f; // How much faster each upgrade makes you
-
+  public float baseFireRate = 0.6f;
+  public int upgradeLevel = 0;
+  public int maxUpgradeLevel = 5;
+  public float upgradeBonusPerLevel = 0.1f;
   public float bulletSpeed = 15f;
 
   private float nextFireTime = 0f;
+  private Transform[] firePoints;
+
+  void Start()
+  {
+    RefreshFirePoints();
+  }
 
   void Update()
   {
-    // Stop shooting while countdown is active
-    if (!SceneUIManager.canPlayerShoot)
-      return;
+    if (!SceneUIManager.canPlayerShoot) return;
 
-    AutoShoot();
+    if (Time.time >= nextFireTime)
+    {
+      Shoot();
+      nextFireTime = Time.time + GetCurrentFireRate();
+    }
   }
 
   float GetCurrentFireRate()
   {
     int clampedLevel = Mathf.Clamp(upgradeLevel, 0, maxUpgradeLevel);
-
-    // Fire rate decreases as upgrades increase (faster shooting)
     float upgradedRate = baseFireRate - (clampedLevel * upgradeBonusPerLevel);
-
-    // Prevent fire rate from ever going below 0.1 seconds
     return Mathf.Clamp(upgradedRate, 0.1f, baseFireRate);
-  }
-
-  void AutoShoot()
-  {
-    float currentRate = GetCurrentFireRate();
-
-    if (Time.time >= nextFireTime)
-    {
-      Shoot();
-      nextFireTime = Time.time + currentRate;
-    }
   }
 
   void Shoot()
   {
-    GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+    if (firePoints == null || firePoints.Length == 0) return;
 
-    Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-    rb.velocity = Vector2.up * bulletSpeed;
+    foreach (Transform fp in firePoints)
+    {
+      if (fp == null) continue; // Safety check
+      GameObject bullet = Instantiate(bulletPrefab, fp.position, fp.rotation);
+      Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+      if (rb != null) rb.velocity = fp.up * bulletSpeed;
+    }
+  }
+
+  /// <summary>
+  /// Call whenever the ship is swapped to refresh firepoints
+  /// </summary>
+  public void RefreshFirePoints()
+  {
+    List<Transform> fpList = new List<Transform>();
+    foreach (Transform t in GetComponentsInChildren<Transform>())
+    {
+      if (t.CompareTag("FirePoint"))
+        fpList.Add(t);
+    }
+    firePoints = fpList.ToArray();
   }
 }
+

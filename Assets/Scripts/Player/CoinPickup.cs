@@ -11,7 +11,7 @@ public class CoinPickup : MonoBehaviour
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
-    if (collision.CompareTag("Player"))
+    if (collision.transform.root.CompareTag("Player"))
     {
       PersistentGameState.Instance.AddCoins(coinValue);
 

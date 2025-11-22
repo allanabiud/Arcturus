@@ -5117,6 +5117,11 @@ MonoBehaviour:
   shieldPickupPrefab: {fileID: 612877875156168777, guid: 8108a03ab9730953ab99a34d0f63ab61, type: 3}
   shieldDropChance: 0.5
   shieldDropCooldown: 5
+  shipUpgradeLv2Prefab: {fileID: 410841050126855258, guid: d61da3ceac9cffe2e9e8149509c0ff94, type: 3}
+  shipUpgradeLv2Chance: 0.08
+  shipUpgradeLv3Prefab: {fileID: 1297952474299664971, guid: f3c25eb61a0863f1181980b34055e4d3, type: 3}
+  shipUpgradeLv3Chance: 0.03
+  shipUpgradeDropCooldown: 10
   lastShieldDropTime: -999
   bossHealth: 30
   bossFireRate: 0.2

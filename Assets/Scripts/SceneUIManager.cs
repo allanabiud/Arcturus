@@ -151,6 +151,10 @@ public class SceneUIManager : MonoBehaviour
     foreach (GameObject shieldUI in GameObject.FindGameObjectsWithTag("ShieldUI"))
       Destroy(shieldUI);
 
+    // Destroy ShipUpgradeUI
+    foreach (GameObject shipUpgradeUI in GameObject.FindGameObjectsWithTag("ShipUpgradeUI"))
+      Destroy(shipUpgradeUI);
+
     // Destroy CoinPickups
     foreach (GameObject coinPickup in GameObject.FindGameObjectsWithTag("CoinPickup"))
       Destroy(coinPickup);
@@ -158,6 +162,10 @@ public class SceneUIManager : MonoBehaviour
     // Destroy ShieldPickups
     foreach (GameObject shieldPickup in GameObject.FindGameObjectsWithTag("ShieldPickup"))
       Destroy(shieldPickup);
+
+    // Destroy ShipUpgradePickups
+    foreach (GameObject shipUpgradePickup in GameObject.FindGameObjectsWithTag("ShipUpgradePickup"))
+      Destroy(shipUpgradePickup);
 
     // Destroy enemies
     foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
