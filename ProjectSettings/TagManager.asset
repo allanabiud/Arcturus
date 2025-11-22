@@ -12,6 +12,9 @@ TagManager:
   - ShieldPickup
   - Shield
   - ShieldUI
+  - FirePoint
+  - ShipUpgradeUI
+  - ShipUpgradePickup
   layers:
   - Default
   - TransparentFX

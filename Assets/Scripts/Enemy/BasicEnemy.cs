@@ -25,12 +25,23 @@ public class BasicEnemy : MonoBehaviour
 
   [Header("Shield Drop Settings")]
   public GameObject shieldPickupPrefab;
-  public float shieldDropChance = 0.1f;      // chance to drop
+  public float shieldDropChance = 0.1f;      // 10% chance to drop
   public float shieldDropCooldown = 5f;      // seconds before the same enemy can drop again
   public static bool ShieldActiveInScene = false;
 
+  [Header("Ship Upgrade Drop Settings")]
+  public GameObject shipUpgradeLv2Prefab;
+  public float shipUpgradeLv2Chance = 0.08f;  // 8% chance to drop
+  public GameObject shipUpgradeLv3Prefab;
+  public float shipUpgradeLv3Chance = 0.03f;  // 3% chance to drop
+  public float shipUpgradeDropCooldown = 10f; // delay before another upgrade can spawn
+  // Track active upgrades in scene
+  public static bool ShipUpgradeLv2ActiveInScene = false;
+  public static bool ShipUpgradeLv3ActiveInScene = false;
+
   [HideInInspector]
-  public float lastShieldDropTime = -999f;   // track last drop time
+  public float lastShieldDropTime = -999f;
+  public static float lastShipUpgradeSpawnTime = -999f;
 
 
   // Called by EnemyFlyIn when the enemy reaches its target
@@ -69,23 +80,49 @@ public class BasicEnemy : MonoBehaviour
   public void TakeDamage(int damage)
   {
     currentHealth -= damage;
+    bool didDropPickup = false;
 
-    bool didDropShield = false;
-
-    // Only try to drop shield if enemy survives the hit, cooldown allows, AND no shield already exists
+    // --- Shield drop ---
     if (shieldPickupPrefab != null && CanDropShield() && !ShieldActiveInScene && Random.value <= shieldDropChance)
     {
       Instantiate(shieldPickupPrefab, transform.position, Quaternion.identity);
       RecordShieldDrop();
       ShieldActiveInScene = true;
-      didDropShield = true;
+      didDropPickup = true;
+    }
+
+    // --- Ship upgrade drop ---
+    if (!didDropPickup)
+    {
+      // Only spawn if no upgrade is active and cooldown passed
+      if (!ShipUpgradeLv2ActiveInScene && !ShipUpgradeLv3ActiveInScene &&
+          Time.time >= lastShipUpgradeSpawnTime + shipUpgradeDropCooldown)
+      {
+        // Try Lv2 first
+        if (shipUpgradeLv2Prefab != null && Random.value <= shipUpgradeLv2Chance)
+        {
+          Instantiate(shipUpgradeLv2Prefab, transform.position, Quaternion.identity);
+          ShipUpgradeLv2ActiveInScene = true;
+          lastShipUpgradeSpawnTime = Time.time;
+          didDropPickup = true;
+        }
+        // If Lv2 didn't drop, try Lv3
+        else if (shipUpgradeLv3Prefab != null && Random.value <= shipUpgradeLv3Chance)
+        {
+          Instantiate(shipUpgradeLv3Prefab, transform.position, Quaternion.identity);
+          ShipUpgradeLv3ActiveInScene = true;
+          lastShipUpgradeSpawnTime = Time.time;
+          didDropPickup = true;
+        }
+      }
     }
 
     if (currentHealth <= 0)
     {
-      Die(didDropShield);
+      Die(didDropPickup);
     }
   }
+
 
   protected virtual void Die(bool droppedShield)
   {

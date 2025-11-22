@@ -10,6 +10,13 @@ public class PlayerController : MonoBehaviour
   private bool isDragging = false;
   private Vector3 offset;
 
+  private SpriteRenderer shipRenderer;
+
+  void Start()
+  {
+    shipRenderer = GetComponentInChildren<SpriteRenderer>();
+  }
+
   // Update is called once per frame
   void Update()
   {
@@ -96,13 +103,19 @@ public class PlayerController : MonoBehaviour
   {
     Camera cam = Camera.main;
 
+    if (shipRenderer == null)
+    {
+      shipRenderer = GetComponentInChildren<SpriteRenderer>();
+      if (shipRenderer == null) return pos;
+    }
+
     // Convert screen edges to world space boundaries
     Vector3 screenBottomLeft = cam.ScreenToWorldPoint(new Vector3(0, 0, 0));
     Vector3 screenTopRight = cam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
 
     // Get ship size (half width & height)
-    float halfWidth = GetComponent<SpriteRenderer>().bounds.size.x / 2f;
-    float halfHeight = GetComponent<SpriteRenderer>().bounds.size.y / 2f;
+    float halfWidth = shipRenderer.bounds.size.x / 2f;
+    float halfHeight = shipRenderer.bounds.size.y / 2f;
 
     // Clamp inside camera view
     pos.x = Mathf.Clamp(pos.x, screenBottomLeft.x + halfWidth, screenTopRight.x - halfWidth);
@@ -131,5 +144,10 @@ public class PlayerController : MonoBehaviour
     EventSystem.current.RaycastAll(ped, results);
 
     return results.Count > 0;
+  }
+
+  public void RefreshShipRenderer()
+  {
+    shipRenderer = GetComponentInChildren<SpriteRenderer>();
   }
 }
