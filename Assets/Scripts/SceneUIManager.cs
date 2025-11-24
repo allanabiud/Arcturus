@@ -51,6 +51,11 @@ public class SceneUIManager : MonoBehaviour
 
     // Reset static shield flag
     BasicEnemy.ShieldActiveInScene = false;
+
+    // Reset ship upgrade flags & cooldown
+    BasicEnemy.ShipUpgradeLv2ActiveInScene = false;
+    BasicEnemy.ShipUpgradeLv3ActiveInScene = false;
+    BasicEnemy.lastShipUpgradeSpawnTime = -999f;
   }
 
   public void RegisterEnemyDestroyed()
