@@ -9,7 +9,7 @@ public class PlayerHealth : MonoBehaviour
   public int baseHealth = 2;      // Base health
   public int maxHealth;           // After upgrades
   public int currentHealth;
-  public int upgradeHits = 0; // value to upgrade by +2 when I implement shop upgrades
+  public int upgradePerLevel = 2;
 
   [Header("UI Settings")]
   public Transform healthUIParent;          // Parent for health icons (bottom-left anchor)
@@ -22,12 +22,11 @@ public class PlayerHealth : MonoBehaviour
 
   void Start()
   {
-    maxHealth = baseHealth;
-    currentHealth = maxHealth;
+    int savedLevel = HealthUpgradeState.Level;
 
-    // Add hits that can be taken to baseHealth which in turn increases playerHealth
-    maxHealth += upgradeHits;
-    currentHealth += upgradeHits;
+    maxHealth = baseHealth + (savedLevel * upgradePerLevel);
+    maxHealth = Mathf.Min(maxHealth, 10);
+    currentHealth = maxHealth;
 
     SetupHealthUI();
   }
@@ -35,16 +34,10 @@ public class PlayerHealth : MonoBehaviour
   // Initialize health icons stacked vertically
   private void SetupHealthUI()
   {
-    // Clear any existing icons
     foreach (Transform child in healthUIParent)
       Destroy(child.gameObject);
 
     healthIcons.Clear();
-
-    // Always show 1 icon for base health
-    GameObject iconGO = Instantiate(fullHealthIconPrefab, healthUIParent);
-    iconGO.transform.localPosition = new Vector3(xOffset, yOffset, 0);
-    healthIcons.Add(iconGO.GetComponent<Image>());
 
     UpdateHealthUI();
   }

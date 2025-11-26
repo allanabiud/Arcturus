@@ -9,6 +9,10 @@ public class CoinPickup : MonoBehaviour
 
   public float textLifetime = 1f; // How long the text stays
 
+  [Header("Audio")]
+  public AudioClip coinPickupSFX;
+  public float coinVolume = 1f;
+
   private void OnTriggerEnter2D(Collider2D collision)
   {
     if (collision.transform.root.CompareTag("Player"))
@@ -43,6 +47,10 @@ public class CoinPickup : MonoBehaviour
         // Destroy after lifetime
         Destroy(instance, textLifetime);
       }
+
+      // Play coin pickup sound
+      if (SettingsManager.IsSfxEnabled && coinPickupSFX != null)
+        AudioSource.PlayClipAtPoint(coinPickupSFX, transform.position, coinVolume);
 
       // Destroy the coin itself immediately
       Destroy(gameObject);

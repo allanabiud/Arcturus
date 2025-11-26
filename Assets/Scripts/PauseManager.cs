@@ -32,6 +32,9 @@ public class PauseManager : MonoBehaviour
     Time.timeScale = 0f;
     isPaused = true;
 
+    if (MusicManager.Instance != null)
+      MusicManager.Instance.SetMusicEnabled(false, false);
+
     // Hide top-right pause button
     if (topRightPauseButton != null)
       topRightPauseButton.SetActive(false);
@@ -50,6 +53,9 @@ public class PauseManager : MonoBehaviour
     Time.timeScale = 1f;
     isPaused = false;
 
+    if (MusicManager.Instance != null)
+      MusicManager.Instance.SetMusicEnabled(MusicManager.IsMusicEnabled, false);
+
     // Show top-right pause button again
     if (topRightPauseButton != null)
       topRightPauseButton.SetActive(true);
@@ -67,12 +73,20 @@ public class PauseManager : MonoBehaviour
   public void GoToMainMenu()
   {
     Time.timeScale = 1f; // make sure game resumes
+
+    if (MusicManager.Instance != null)
+      MusicManager.Instance.RestartMusic();
+
     SceneManager.LoadScene("MainMenu");
   }
 
   public void RestartGame()
   {
     Time.timeScale = 1f; // make sure time is running
+
+    if (MusicManager.Instance != null)
+      MusicManager.Instance.RestartMusic();
+
     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
 }

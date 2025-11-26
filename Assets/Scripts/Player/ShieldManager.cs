@@ -10,12 +10,16 @@ public class ShieldManager : MonoBehaviour
   public float baseDuration = 5f;
   private float shieldEndTime;
 
+  [Header("Audio")]
+  public AudioClip shieldUpSFX;
+  public AudioClip shieldDownSFX;
+  public float shieldVolume = 1f;
+
   // Add upgrade later: PersistentGameState.Instance.ShieldDurationLevel
   public float GetShieldDuration()
   {
-    // int upgradeLevel = PersistentGameState.Instance.ShieldDurationLevel;
-    // return baseDuration + (upgradeLevel * 1.5f); // Example: +1.5 sec per level
-    return baseDuration;
+    int upgradeLevel = ShieldDurationUpgradeState.Level;
+    return baseDuration + (upgradeLevel * 2.5f); // Each level adds 2.5 sec
   }
 
   public void ActivateShield()
@@ -26,6 +30,10 @@ public class ShieldManager : MonoBehaviour
     float duration = GetShieldDuration();
     shieldEndTime = Time.time + duration; // Set end time for UI
     shieldRoutine = StartCoroutine(ShieldDurationRoutine());
+
+    // Play shield activate sound
+    if (shieldUpSFX != null)
+      AudioSource.PlayClipAtPoint(shieldUpSFX, transform.position, shieldVolume);
   }
 
   private IEnumerator ShieldDurationRoutine()
@@ -42,6 +50,11 @@ public class ShieldManager : MonoBehaviour
     }
 
     shieldEffect.SetActive(false);
+
+    // Play shield deactivate sound
+    if (shieldDownSFX != null)
+      AudioSource.PlayClipAtPoint(shieldDownSFX, transform.position, shieldVolume);
+
   }
 
   public bool IsShieldActive()

@@ -6,6 +6,10 @@ public class EnemyBullet : MonoBehaviour
 {
   public GameObject hitEffectPlayer;
 
+  [Header("Audio")]
+  public AudioClip hitPlayerSFX;
+  public float hitVolume = 1f;
+
   private void OnTriggerEnter2D(Collider2D collision)
   {
     if (collision.CompareTag("Shield"))
@@ -21,7 +25,14 @@ public class EnemyBullet : MonoBehaviour
       collision.GetComponentInParent<PlayerHealth>()?.TakeDamage(1);
 
       // Spawn sparks at impact
-      Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);
+      if (SettingsManager.ArePlayerParticlesEnabled)
+      {
+        Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);
+      }
+
+      // Play sound effect
+      if (hitPlayerSFX != null)
+        AudioSource.PlayClipAtPoint(hitPlayerSFX, transform.position, hitVolume);
 
       // Vibrate device (mild vibration)
 #if UNITY_ANDROID || UNITY_IOS

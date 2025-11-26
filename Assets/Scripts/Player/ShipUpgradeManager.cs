@@ -10,7 +10,7 @@ public class ShipUpgradeManager : MonoBehaviour
   public GameObject defaultShipPrefab; // ShipLv1 prefab to revert to
 
   [Header("Upgrade Settings")]
-  public float upgradeDuration = 10f; // Seconds for temporary upgrades
+  public float upgradeDuration = 5f; // Seconds for temporary upgrades
 
   private PlayerShooting shootingScript;
   private Coroutine upgradeRoutine;
@@ -43,14 +43,14 @@ public class ShipUpgradeManager : MonoBehaviour
     GetComponent<PlayerController>()?.RefreshShipRenderer();
 
     // Start duration timer
-    upgradeEndTime = Time.time + upgradeDuration;
+    upgradeEndTime = Time.time + GetUpgradeDuration();
     upgradeRoutine = StartCoroutine(UpgradeDurationTimer());
-  }
 
+  }
 
   private IEnumerator UpgradeDurationTimer()
   {
-    float timer = upgradeDuration;
+    float timer = GetUpgradeDuration();
     while (timer > 0f)
     {
       timer -= Time.deltaTime;
@@ -60,6 +60,13 @@ public class ShipUpgradeManager : MonoBehaviour
     // Revert back to default ship
     RevertToDefaultShip();
   }
+
+  public float GetUpgradeDuration()
+  {
+    int level = ShipUpgradeDurationState.Level;
+    return upgradeDuration + (level * 2.5f); // Example: each level adds 2.5 seconds
+  }
+
 
   private void RevertToDefaultShip()
   {

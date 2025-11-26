@@ -22,10 +22,13 @@ public class SceneUIManager : MonoBehaviour
   public TextMeshProUGUI victoryWaveText;
   public TextMeshProUGUI victoryEnemiesText;
 
-
   [Header("Stats")]
   public int currentWave = 1;
   public int enemiesDestroyed = 0;
+
+  [Header("Audio")]
+  public AudioSource audioSource;
+  public AudioClip gameOverSFX;
 
   private void Awake()
   {
@@ -78,7 +81,7 @@ public class SceneUIManager : MonoBehaviour
     }
   }
 
-  public void GameOver(float delay = 1f)
+  public void GameOver(float delay = 0.5f)
   {
     if (isGameOver) return;
     StartCoroutine(GameOverRoutine(delay));
@@ -101,10 +104,20 @@ public class SceneUIManager : MonoBehaviour
     // Remove all enemies + bullets
     CleanupObjects();
 
+    // Stop the background music
+    if (MusicManager.Instance != null)
+      MusicManager.Instance.SetMusicEnabled(false, false);
+
     // Show game over panel
     gameOverPanel.SetActive(true);
     currentWaveText.text = currentWave.ToString();
     enemiesDestroyedText.text = enemiesDestroyed.ToString();
+
+    // Play Game Over sound if assigned
+    if (audioSource != null && gameOverSFX != null)
+    {
+      audioSource.PlayOneShot(gameOverSFX);
+    }
   }
 
   public void Victory(float delay = 1f)
@@ -129,6 +142,10 @@ public class SceneUIManager : MonoBehaviour
     // Clean up objects
     CleanupObjects();
 
+    // Stop the background music
+    if (MusicManager.Instance != null)
+      MusicManager.Instance.SetMusicEnabled(false, false);
+
     // Show victory panel
     if (victoryPanel != null)
       victoryPanel.SetActive(true);
@@ -147,6 +164,10 @@ public class SceneUIManager : MonoBehaviour
     // Destroy Player Object
     foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
       Destroy(player);
+
+    // Destroy HitEffects
+    foreach (GameObject hitEffect in GameObject.FindGameObjectsWithTag("HitEffect"))
+      Destroy(hitEffect);
 
     // Destroy HealthUI
     foreach (GameObject healthUI in GameObject.FindGameObjectsWithTag("HealthUI"))
@@ -185,8 +206,6 @@ public class SceneUIManager : MonoBehaviour
 
     // Remove pauseIcon
     Destroy(topRightPauseButton);
-
-    // (Optional) Destroy pickups or obstacles if you add them later
   }
 
 }

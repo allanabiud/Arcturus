@@ -10,10 +10,6 @@ public class UpgradeProgressUI : MonoBehaviour
   public Sprite filledSprite;    // Filled circle
   public Sprite emptySprite;     // Empty circle
 
-  /// <summary>
-  /// Updates the UI according to the current upgrade level.
-  /// upgradeLevel is 0–4 (representing Lv1–Lv5)
-  /// </summary>
   public void SetProgress(int upgradeLevel)
   {
     // Make sure the level does not go out of range
@@ -21,7 +17,7 @@ public class UpgradeProgressUI : MonoBehaviour
 
     for (int i = 0; i < levelIcons.Length; i++)
     {
-      if (i <= upgradeLevel)
+      if (i < upgradeLevel)
         levelIcons[i].sprite = filledSprite;   // Fill this level
       else
         levelIcons[i].sprite = emptySprite;    // Keep empty

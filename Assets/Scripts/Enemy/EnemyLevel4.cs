@@ -68,6 +68,8 @@ public class EnemyLevel4 : BasicEnemy
 
   protected override void Shoot()
   {
+    base.Shoot();
+
     // Spawn homing bullet prefab (like Level 2)
     Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
   }

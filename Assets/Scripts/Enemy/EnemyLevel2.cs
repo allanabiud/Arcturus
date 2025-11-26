@@ -17,6 +17,8 @@ public class EnemyLevel2 : BasicEnemy
 
   protected override void Shoot()
   {
+    base.Shoot();
+
     // Spawn Seeking Bullet
     Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
   }

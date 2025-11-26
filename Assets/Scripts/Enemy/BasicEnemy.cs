@@ -43,6 +43,10 @@ public class BasicEnemy : MonoBehaviour
   public float lastShieldDropTime = -999f;
   public static float lastShipUpgradeSpawnTime = -999f;
 
+  [Header("Audio")]
+  public AudioSource audioSource;
+  public AudioClip shootSFX;
+
 
   // Called by EnemyFlyIn when the enemy reaches its target
   public void EnableShooting()
@@ -75,12 +79,22 @@ public class BasicEnemy : MonoBehaviour
   {
     GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
     bullet.GetComponent<Rigidbody2D>().velocity = firePoint.up * 5f; // Bullet moves in firePoint's forward direction
+
+    // Play shooting sound if SFX is enabled
+    if (SettingsManager.IsSfxEnabled && audioSource != null && shootSFX != null)
+    {
+      audioSource.PlayOneShot(shootSFX);
+    }
   }
 
   public void TakeDamage(int damage)
   {
     currentHealth -= damage;
     bool didDropPickup = false;
+
+    // Don't spawn pickups while flying in
+    if (!canShoot)
+      return;
 
     // --- Shield drop ---
     if (shieldPickupPrefab != null && CanDropShield() && !ShieldActiveInScene && Random.value <= shieldDropChance)

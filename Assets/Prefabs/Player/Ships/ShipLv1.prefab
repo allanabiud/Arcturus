@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 8875372911208393052}
   - component: {fileID: 4830805033551860402}
   - component: {fileID: 8273048889770682541}
+  - component: {fileID: -5370899415048908888}
   m_Layer: 6
   m_Name: ShipLv1
   m_TagString: Untagged
@@ -174,6 +175,18 @@ PolygonCollider2D:
       - {x: 0.16936453, y: -0.12239967}
       - {x: 0.16942717, y: -0.10058108}
   m_UseDelaunayMesh: 0
+--- !u!114 &-5370899415048908888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5688894725682622369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c20ba31a35f518c33a4569868f03fb98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7790908909310493651
 GameObject:
   m_ObjectHideFlags: 0

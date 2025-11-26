@@ -15,7 +15,11 @@ public class PlayerBullet : MonoBehaviour
       if (enemy != null)
         enemy.TakeDamage(1); // Enemy handles shield drop
 
-      Instantiate(hitEffectEnemy, transform.position, Quaternion.identity);
+      // Spawn hit effect only if Enemy Particles are enabled
+      if (SettingsManager.AreEnemyParticlesEnabled)
+      {
+        Instantiate(hitEffectEnemy, transform.position, Quaternion.identity);
+      }
       Destroy(gameObject);
     }
   }

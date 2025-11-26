@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-  public float moveSpeed = 16f;
+  public float moveSpeed = 14f;
 
   private bool isDragging = false;
   private Vector3 offset;

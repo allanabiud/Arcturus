@@ -82,6 +82,10 @@ public class BossEnemy : BasicEnemy
     {
       GameObject bullet2 = Instantiate(bulletPrefab, firePoint2.position, firePoint2.rotation);
     }
+
+    // Play shooting sound manually
+    if (SettingsManager.IsSfxEnabled && audioSource != null && shootSFX != null)
+      audioSource.PlayOneShot(shootSFX, 0.3f);
   }
 
   // Override Die to skip shield drop and always spawn coin

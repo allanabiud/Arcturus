@@ -147,6 +147,8 @@ MonoBehaviour:
   floatSpeed: 1
   moveSpeed: 3
   shipPrefab: {fileID: 2589611069462892931, guid: 3b761c5e93cf9c7dfb657ceab54ffb9d, type: 3}
+  shipUpgradePickupSFX: {fileID: 8300000, guid: 8291198fd1af59b00a81b1c091be01b7, type: 3}
+  shipUpgradeVolume: 1
 --- !u!1 &1434553861717467024
 GameObject:
   m_ObjectHideFlags: 0

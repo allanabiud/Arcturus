@@ -14,6 +14,10 @@ public class SeekingBullet : MonoBehaviour
   [Header("Effects")]
   public GameObject hitEffectPlayer;
 
+  [Header("Audio")]
+  public AudioClip hitPlayerSFX;
+  public float hitVolume = 1f;
+
   void Start()
   {
     rb = GetComponent<Rigidbody2D>();
@@ -71,7 +75,15 @@ public class SeekingBullet : MonoBehaviour
       collision.GetComponentInParent<PlayerHealth>()?.TakeDamage(1);
 
       // Spawn sparks at impact
-      Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);
+      if (SettingsManager.ArePlayerParticlesEnabled)
+      {
+        Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);
+      }
+
+      // Play sound effect
+      if (hitPlayerSFX != null)
+        AudioSource.PlayClipAtPoint(hitPlayerSFX, transform.position, hitVolume);
+
 
       // Vibrate device (mild vibration)
 #if UNITY_ANDROID || UNITY_IOS

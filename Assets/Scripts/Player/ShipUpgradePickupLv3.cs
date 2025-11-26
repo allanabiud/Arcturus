@@ -9,6 +9,10 @@ public class ShipUpgradePickupLv3 : MonoBehaviour
   private bool reachedTarget = false;
   private float targetY;
 
+  [Header("Audio")]
+  public AudioClip shipUpgradePickupSFX;
+  public float shipUpgradeVolume = 1f;
+
   private void Start()
   {
     Camera cam = Camera.main;
@@ -16,8 +20,9 @@ public class ShipUpgradePickupLv3 : MonoBehaviour
     float camTop = cam.transform.position.y + cam.orthographicSize;
     float camMiddle = (camTop + camBottom) / 2f;
 
+    float startY = transform.position.y;
     float baseY = camBottom + (camMiddle - camBottom) * 0.95f;
-    targetY = FloatingPickupManager.GetNextYPosition(baseY);
+    targetY = Mathf.Min(startY, FloatingPickupManager.GetNextYPosition(baseY));
   }
 
   private void Update()
@@ -28,7 +33,7 @@ public class ShipUpgradePickupLv3 : MonoBehaviour
       pos.y = Mathf.MoveTowards(pos.y, targetY, moveSpeed * Time.deltaTime);
       transform.position = pos;
 
-      if (Mathf.Abs(pos.y - targetY) < 0.01f)
+      if (Mathf.Abs(pos.y - targetY) < 0.05f) // slightly larger tolerance
         reachedTarget = true;
     }
     else
@@ -50,6 +55,10 @@ public class ShipUpgradePickupLv3 : MonoBehaviour
         BasicEnemy.ShipUpgradeLv3ActiveInScene = false;
         FloatingPickupManager.ReleaseYPosition(targetY);
       }
+
+      // Play coin pickup sound
+      if (SettingsManager.IsSfxEnabled && shipUpgradePickupSFX != null)
+        AudioSource.PlayClipAtPoint(shipUpgradePickupSFX, transform.position, shipUpgradeVolume);
 
       Destroy(gameObject);
     }

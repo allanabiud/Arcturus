@@ -155,4 +155,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   floatSpeed: 1
-  rotateSpeed: 50
+  moveSpeed: 3
+  shieldPickupSFX: {fileID: 8300000, guid: 8291198fd1af59b00a81b1c091be01b7, type: 3}
+  shieldVolume: 1

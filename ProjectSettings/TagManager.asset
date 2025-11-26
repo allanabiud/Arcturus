@@ -15,6 +15,7 @@ TagManager:
   - FirePoint
   - ShipUpgradeUI
   - ShipUpgradePickup
+  - HitEffect
   layers:
   - Default
   - TransparentFX
