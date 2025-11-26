@@ -12,7 +12,7 @@ public class EnemyParticleController : MonoBehaviour
     persistentParticles = GetComponentsInChildren<ParticleSystem>();
 
     // Apply initial state
-    ApplyParticleState(SettingsManager.AreEnemyParticlesEnabled);
+    ApplyParticleState(SettingsManager.AreEnemyEngineTrailsEnabled);
   }
 
   public void ApplyParticleState(bool enabled)

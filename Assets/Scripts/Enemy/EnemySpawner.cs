@@ -21,7 +21,15 @@ public class Wave
 
 public class EnemySpawner : MonoBehaviour
 {
-  [Header("Wave Settings")]
+  private bool infinite => GameMode.infiniteMode;
+
+  [Header("Infinite Mode Settings")]
+  public List<EnemyType> infiniteEnemies;
+  public float infiniteSpawnInterval = 1.0f;
+  public int minInfiniteEnemies = 4;
+  public int maxInfiniteEnemies = 7;
+
+  [Header("Normal Mode Settings")]
   public List<Wave> waves;
 
   [Header("Wave UI")]
@@ -38,15 +46,13 @@ public class EnemySpawner : MonoBehaviour
   [Header("Start Settings")]
   public float startDelay = 3f;       // Countdown duration
   public TMPro.TextMeshProUGUI countdownText;
-  // public UnityEngine.UI.Image countdownImage;
-  // public List<Sprite> countdownSprites;
 
   [Header("UI Controls")]
   public GameObject pauseButton;
 
-
   private Camera mainCamera;
   private int currentWaveIndex = 0;
+
 
   private void Start()
   {
@@ -100,14 +106,18 @@ public class EnemySpawner : MonoBehaviour
   {
     if (currentWaveIndex >= waves.Count)
     {
-      // Trigger victory!
-      SceneUIManager.Instance.Victory();
-
-      yield break;
+      if (infinite)
+      {
+        yield return SpawnInfiniteWave();
+        StartCoroutine(SpawnWave());
+        yield break;
+      }
+      else
+      {
+        SceneUIManager.Instance.Victory();
+        yield break;
+      }
     }
-
-    // Delay after countdown
-    // yield return new WaitForSeconds(0.5f);
 
     // Show wave text and wait until fade in/out completes
     yield return StartCoroutine(ShowWaveText());
@@ -208,6 +218,90 @@ public class EnemySpawner : MonoBehaviour
 
     currentWaveIndex++;
     StartCoroutine(SpawnWave());
+  }
+
+  private IEnumerator SpawnInfiniteWave()
+  {
+    // Show wave text
+    yield return StartCoroutine(ShowWaveText());
+
+    SceneUIManager.Instance.SetWave(currentWaveIndex + 1);
+    SceneUIManager.canPlayerShoot = true;
+
+    List<GameObject> spawnedEnemies = new List<GameObject>();
+    List<Vector2> usedPositions = new List<Vector2>();
+
+    int enemyCount = Random.Range(minInfiniteEnemies, maxInfiniteEnemies + 1);
+
+    // Camera bounds
+    float camHeight = 2f * mainCamera.orthographicSize;
+    float camWidth = camHeight * mainCamera.aspect;
+
+    float camTop = mainCamera.transform.position.y + camHeight / 2f;
+    float camMiddle = mainCamera.transform.position.y;
+
+    float textReserved = 1.0f;
+
+    float yTopSpawnLimit = camTop - textReserved;
+    float yBottomSpawnLimit = Mathf.Lerp(yTopSpawnLimit, camMiddle, 0.5f);
+
+    float xMin = mainCamera.transform.position.x - camWidth / 2f + padding;
+    float xMax = mainCamera.transform.position.x + camWidth / 2f - padding;
+
+    for (int i = 0; i < enemyCount; i++)
+    {
+      EnemyType type = infiniteEnemies[Random.Range(0, infiniteEnemies.Count)];
+
+      bool isLevel3 = type.prefab.GetComponent<EnemyLevel3>() != null;
+      float safeAmplitude = isLevel3 ? type.prefab.GetComponent<EnemyLevel3>().moveAmplitude : 0f;
+
+      float adjustedXMin = xMin + safeAmplitude;
+      float adjustedXMax = xMax - safeAmplitude;
+
+      Vector2 spawnPos2D;
+      int tries = 0;
+
+      do
+      {
+        float xPos = isLevel3 ?
+            Random.Range(adjustedXMin, adjustedXMax) :
+            Random.Range(xMin, xMax);
+
+        float yPos = Random.Range(yBottomSpawnLimit, yTopSpawnLimit);
+        spawnPos2D = new Vector2(xPos, yPos);
+
+        tries++;
+      }
+      while (IsOverlapping(spawnPos2D, usedPositions, 1f) && tries < 20);
+
+      usedPositions.Add(spawnPos2D);
+
+      Vector3 spawnPos = new Vector3(spawnPos2D.x, yTopSpawnLimit + 2f, 0f);
+      GameObject enemy = Instantiate(type.prefab, spawnPos, type.prefab.transform.rotation);
+
+      EnemyFlyIn flyIn = enemy.GetComponent<EnemyFlyIn>();
+      if (flyIn == null)
+        flyIn = enemy.AddComponent<EnemyFlyIn>();
+
+      flyIn.targetPosition = new Vector3(spawnPos2D.x, spawnPos2D.y, 0f);
+      flyIn.speed = flyInSpeed;
+
+      spawnedEnemies.Add(enemy);
+
+      yield return new WaitForSeconds(infiniteSpawnInterval);
+    }
+
+    // Wait until all enemies are destroyed
+    while (spawnedEnemies.Count > 0)
+    {
+      spawnedEnemies.RemoveAll(e => e == null);
+      yield return null;
+    }
+
+    // small delay before next wave
+    yield return new WaitForSeconds(1f);
+
+    currentWaveIndex++; // increases wave counter for UI
   }
 
   // Check if a new position is too close to existing ones

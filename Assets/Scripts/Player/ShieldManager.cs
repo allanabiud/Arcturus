@@ -32,8 +32,13 @@ public class ShieldManager : MonoBehaviour
     shieldRoutine = StartCoroutine(ShieldDurationRoutine());
 
     // Play shield activate sound
-    if (shieldUpSFX != null)
-      AudioSource.PlayClipAtPoint(shieldUpSFX, transform.position, shieldVolume);
+    if (SettingsManager.IsSfxEnabled)
+    {
+      if (shieldUpSFX != null)
+      {
+        AudioSource.PlayClipAtPoint(shieldUpSFX, transform.position, shieldVolume);
+      }
+    }
   }
 
   private IEnumerator ShieldDurationRoutine()
@@ -52,8 +57,13 @@ public class ShieldManager : MonoBehaviour
     shieldEffect.SetActive(false);
 
     // Play shield deactivate sound
-    if (shieldDownSFX != null)
-      AudioSource.PlayClipAtPoint(shieldDownSFX, transform.position, shieldVolume);
+    if (SettingsManager.IsSfxEnabled)
+    {
+      if (shieldDownSFX != null)
+      {
+        AudioSource.PlayClipAtPoint(shieldDownSFX, transform.position, shieldVolume);
+      }
+    }
 
   }
 

@@ -60,11 +60,16 @@ public class ShieldPickup : MonoBehaviour
       FloatingPickupManager.ReleaseYPosition(targetY);
 
       // Play coin pickup sound
-      if (SettingsManager.IsSfxEnabled && shieldPickupSFX != null)
-        AudioSource.PlayClipAtPoint(shieldPickupSFX, transform.position, shieldVolume);
+      if (SettingsManager.IsSfxEnabled)
+      {
+        if (shieldPickupSFX != null)
+        {
+
+          AudioSource.PlayClipAtPoint(shieldPickupSFX, transform.position, shieldVolume);
+        }
+      }
 
       Destroy(gameObject);
-
     }
   }
 }

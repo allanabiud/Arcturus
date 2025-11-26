@@ -49,8 +49,14 @@ public class CoinPickup : MonoBehaviour
       }
 
       // Play coin pickup sound
-      if (SettingsManager.IsSfxEnabled && coinPickupSFX != null)
-        AudioSource.PlayClipAtPoint(coinPickupSFX, transform.position, coinVolume);
+      if (SettingsManager.IsSfxEnabled)
+      {
+        if (coinPickupSFX != null)
+        {
+          // Play sound if the clip exists and SFX is enabled
+          AudioSource.PlayClipAtPoint(coinPickupSFX, transform.position, coinVolume);
+        }
+      }
 
       // Destroy the coin itself immediately
       Destroy(gameObject);

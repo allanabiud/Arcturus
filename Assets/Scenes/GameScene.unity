@@ -151,6 +151,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0517a7f1da8dea74f9b8a02c8ac62883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  infiniteEnemies:
+  - name: BasicEnemy
+    prefab: {fileID: 9140977118572251688, guid: 7c8605066ddda3b7f834b69d261e72cc, type: 3}
+  - name: EnemyLv2
+    prefab: {fileID: 8952200105729479131, guid: c5af146509fc48adfaece97fdffddf77, type: 3}
+  - name: EnemyLv3
+    prefab: {fileID: 8231025162298630335, guid: 32004102de47d0437bc2d0259046edc2, type: 3}
+  - name: EnemyLv4
+    prefab: {fileID: 2169245729410480289, guid: 589e7799b210bdf71879d95b94edfa6a, type: 3}
+  infiniteSpawnInterval: 1
+  minInfiniteEnemies: 4
+  maxInfiniteEnemies: 7
   waves:
   - waveName: One
     enemyTypesToSpawn:

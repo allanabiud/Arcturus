@@ -58,8 +58,13 @@ public class ShipUpgradePickupLv2 : MonoBehaviour
       }
 
       // Play coin pickup sound
-      if (SettingsManager.IsSfxEnabled && shipUpgradePickupSFX != null)
-        AudioSource.PlayClipAtPoint(shipUpgradePickupSFX, transform.position, shipUpgradeVolume);
+      if (SettingsManager.IsSfxEnabled)
+      {
+        if (shipUpgradePickupSFX != null)
+        {
+          AudioSource.PlayClipAtPoint(shipUpgradePickupSFX, transform.position, shipUpgradeVolume);
+        }
+      }
 
       Destroy(gameObject);
     }
