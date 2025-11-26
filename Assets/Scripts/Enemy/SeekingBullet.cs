@@ -75,7 +75,7 @@ public class SeekingBullet : MonoBehaviour
       collision.GetComponentInParent<PlayerHealth>()?.TakeDamage(1);
 
       // Spawn sparks at impact
-      if (SettingsManager.ArePlayerParticlesEnabled)
+      if (SettingsManager.ArePlayerHitEffectsEnabled)
       {
         Instantiate(hitEffectPlayer, transform.position, Quaternion.identity);
       }

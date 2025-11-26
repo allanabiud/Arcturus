@@ -12,7 +12,7 @@ public class PlayerParticleController : MonoBehaviour
     engineTrails = GetComponentsInChildren<ParticleSystem>();
 
     // Apply initial state
-    ApplyParticleState(SettingsManager.ArePlayerParticlesEnabled);
+    ApplyParticleState(SettingsManager.ArePlayerEngineTrailsEnabled);
   }
 
   public void ApplyParticleState(bool enabled)

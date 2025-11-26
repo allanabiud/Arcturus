@@ -9,27 +9,35 @@ public class SettingsManager : MonoBehaviour
   public Toggle musicToggle;
   public Toggle sfxToggle;
   public Toggle backgroundParticlesToggle;
-  public Toggle playerParticlesToggle;
-  public Toggle enemyParticlesToggle;
+  public Toggle playerEngineTrailToggle;
+  public Toggle playerHitEffectToggle;
+  public Toggle enemyEngineTrailToggle;
+  public Toggle enemyHitEffectToggle;
 
   private bool currentMusicState;
   private bool currentSfxState;
   private bool currentBackgroundParticlesState;
-  private bool currentPlayerParticlesState;
-  private bool currentEnemyParticlesState;
+  private bool currentPlayerEngineTrailState;
+  private bool currentPlayerHitEffectState;
+  private bool currentEnemyEngineTrailState;
+  private bool currentEnemyHitEffectState;
 
   public static bool IsSfxEnabled => PlayerPrefs.GetInt("SFX", 1) == 1;
   public static bool AreBackgroundParticlesEnabled => PlayerPrefs.GetInt("Particles", 1) == 1;
-  public static bool ArePlayerParticlesEnabled => PlayerPrefs.GetInt("PlayerParticles", 1) == 1;
-  public static bool AreEnemyParticlesEnabled => PlayerPrefs.GetInt("EnemyParticles", 1) == 1;
+  public static bool ArePlayerEngineTrailsEnabled => PlayerPrefs.GetInt("EngineTrails", 1) == 1;
+  public static bool ArePlayerHitEffectsEnabled => PlayerPrefs.GetInt("PlayerHitEffects", 1) == 1;
+  public static bool AreEnemyEngineTrailsEnabled => PlayerPrefs.GetInt("EnemyEngineTrails", 1) == 1;
+  public static bool AreEnemyHitEffectsEnabled => PlayerPrefs.GetInt("EnemyHitEffects", 1) == 1;
 
   private void Start()
   {
     currentMusicState = PlayerPrefs.GetInt("Music", 1) == 1;
     currentSfxState = PlayerPrefs.GetInt("SFX", 1) == 1;
     currentBackgroundParticlesState = PlayerPrefs.GetInt("Particles", 1) == 1;
-    currentPlayerParticlesState = PlayerPrefs.GetInt("PlayerParticles", 1) == 1;
-    currentEnemyParticlesState = PlayerPrefs.GetInt("EnemyParticles", 1) == 1;
+    currentPlayerEngineTrailState = PlayerPrefs.GetInt("EngineTrails", 1) == 1;
+    currentPlayerHitEffectState = PlayerPrefs.GetInt("PlayerHitEffects", 1) == 1;
+    currentEnemyEngineTrailState = PlayerPrefs.GetInt("EnemyEngineTrails", 1) == 1;
+    currentEnemyHitEffectState = PlayerPrefs.GetInt("EnemyHitEffects", 1) == 1;
 
     // Update toggle UI
     if (musicToggle != null)
@@ -57,18 +65,32 @@ public class SettingsManager : MonoBehaviour
       backgroundParticlesToggle.onValueChanged.AddListener(OnBackgroundParticlesToggleChanged);
     }
 
-    if (playerParticlesToggle != null)
+    if (playerEngineTrailToggle != null)
     {
-      playerParticlesToggle.onValueChanged.RemoveAllListeners();
-      playerParticlesToggle.isOn = currentPlayerParticlesState;
-      playerParticlesToggle.onValueChanged.AddListener(OnPlayerParticlesToggleChanged);
+      playerEngineTrailToggle.onValueChanged.RemoveAllListeners();
+      playerEngineTrailToggle.isOn = currentPlayerEngineTrailState;
+      playerEngineTrailToggle.onValueChanged.AddListener(OnPlayerEngineTrailToggleChanged);
     }
 
-    if (enemyParticlesToggle != null)
+    if (playerHitEffectToggle != null)
     {
-      enemyParticlesToggle.onValueChanged.RemoveAllListeners();
-      enemyParticlesToggle.isOn = currentEnemyParticlesState;
-      enemyParticlesToggle.onValueChanged.AddListener(OnEnemyParticlesToggleChanged);
+      playerHitEffectToggle.onValueChanged.RemoveAllListeners();
+      playerHitEffectToggle.isOn = currentPlayerHitEffectState;
+      playerHitEffectToggle.onValueChanged.AddListener(OnPlayerHitEffectToggleChanged);
+    }
+
+    if (enemyEngineTrailToggle != null)
+    {
+      enemyEngineTrailToggle.onValueChanged.RemoveAllListeners();
+      enemyEngineTrailToggle.isOn = currentEnemyEngineTrailState;
+      enemyEngineTrailToggle.onValueChanged.AddListener(OnEnemyEngineTrailToggleChanged);
+    }
+
+    if (enemyHitEffectToggle != null)
+    {
+      enemyHitEffectToggle.onValueChanged.RemoveAllListeners();
+      enemyHitEffectToggle.isOn = currentEnemyHitEffectState;
+      enemyHitEffectToggle.onValueChanged.AddListener(OnEnemyHitEffectToggleChanged);
     }
   }
 
@@ -87,14 +109,24 @@ public class SettingsManager : MonoBehaviour
     ToggleBackgroundParticles(enabled);
   }
 
-  public void OnPlayerParticlesToggleChanged(bool enabled)
+  public void OnPlayerEngineTrailToggleChanged(bool enabled)
   {
-    TogglePlayerParticles(enabled);
+    TogglePlayerEngineTrails(enabled);
   }
 
-  public void OnEnemyParticlesToggleChanged(bool enabled)
+  public void OnPlayerHitEffectToggleChanged(bool enabled)
   {
-    ToggleEnemyParticles(enabled);
+    TogglePlayerHitEffects(enabled);
+  }
+
+  public void OnEnemyEngineTrailToggleChanged(bool enabled)
+  {
+    ToggleEnemyEngineTrails(enabled);
+  }
+
+  public void OnEnemyHitEffectToggleChanged(bool enabled)
+  {
+    ToggleEnemyHitEffects(enabled);
   }
 
   // Toggle Music
@@ -128,21 +160,34 @@ public class SettingsManager : MonoBehaviour
     UpdateBackgroundParticles(enabled);
   }
 
-  // Toggle Player particles
-  public static void TogglePlayerParticles(bool enabled)
+  // Toggle Player Engine Trail
+  public static void TogglePlayerEngineTrails(bool enabled)
   {
-    PlayerPrefs.SetInt("PlayerParticles", enabled ? 1 : 0);
+    PlayerPrefs.SetInt("EngineTrails", enabled ? 1 : 0);
     PlayerPrefs.Save();
-
-    UpdatePlayerParticles(enabled);
+    UpdatePlayerEngineTrails(enabled);
   }
 
-  public static void ToggleEnemyParticles(bool enabled)
+  // Toggle Player Hit Effect
+  public static void TogglePlayerHitEffects(bool enabled)
   {
-    PlayerPrefs.SetInt("EnemyParticles", enabled ? 1 : 0);
+    PlayerPrefs.SetInt("PlayerHitEffects", enabled ? 1 : 0);
     PlayerPrefs.Save();
+  }
 
-    UpdateEnemyParticles(enabled);
+  // Toggle Enemy Engine Trail
+  public static void ToggleEnemyEngineTrails(bool enabled)
+  {
+    PlayerPrefs.SetInt("EnemyEngineTrails", enabled ? 1 : 0);
+    PlayerPrefs.Save();
+    UpdateEnemyEngineTrails(enabled);
+  }
+
+  // Toggle Enemy Hit Effect
+  public static void ToggleEnemyHitEffects(bool enabled)
+  {
+    PlayerPrefs.SetInt("EnemyHitEffects", enabled ? 1 : 0);
+    PlayerPrefs.Save();
   }
 
   public static void UpdateBackgroundParticles(bool enabled)
@@ -157,24 +202,26 @@ public class SettingsManager : MonoBehaviour
     }
   }
 
-  public static void UpdatePlayerParticles(bool enabled)
+  public static void UpdatePlayerEngineTrails(bool enabled)
   {
     // Find all active instances of the new controller script
     PlayerParticleController[] allPlayers = FindObjectsOfType<PlayerParticleController>();
 
     foreach (PlayerParticleController playerController in allPlayers)
     {
+      // PlayerParticleController will now only manage engine trails
       playerController.ApplyParticleState(enabled);
     }
   }
 
-  public static void UpdateEnemyParticles(bool enabled)
+  public static void UpdateEnemyEngineTrails(bool enabled)
   {
-    // Find all active instances of the new controller script
+    // Find all active instances of the EnemyParticleController
     EnemyParticleController[] allEnemies = FindObjectsOfType<EnemyParticleController>();
 
     foreach (EnemyParticleController enemyController in allEnemies)
     {
+      // Controller will now only manage engine trails
       enemyController.ApplyParticleState(enabled);
     }
   }
