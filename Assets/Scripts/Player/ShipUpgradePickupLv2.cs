@@ -17,19 +17,28 @@ public class ShipUpgradePickupLv2 : MonoBehaviour
   private void Start()
   {
     Camera cam = Camera.main;
+    // Calculate screen boundaries
     float camBottom = cam.transform.position.y - cam.orthographicSize;
-    float camTop = cam.transform.position.y + cam.orthographicSize;
-    float camMiddle = (camTop + camBottom) / 2f;
+    float camMiddle = cam.transform.position.y;
+    float desiredBaseY = camBottom + (cam.orthographicSize * 0.65f);
 
-    float startY = transform.position.y;
-    float baseY = camBottom + (camMiddle - camBottom) * 0.95f;
-    targetY = Mathf.Min(startY, FloatingPickupManager.GetNextYPosition(baseY));
+    // Get the final Y position using the manager to prevent overlaps
+    targetY = FloatingPickupManager.GetNextYPosition(desiredBaseY);
+
+    targetY = Mathf.Min(transform.position.y, targetY);
   }
 
   private void Update()
   {
-    if (!reachedTarget)
+    // Check if the pickup is significantly above its target, indicating it just spawned
+    if (transform.position.y > targetY + 1f && !reachedTarget)
     {
+      // Add a strong initial push downwards to clear the enemy wreckage zone.
+      transform.Translate(Vector3.down * (moveSpeed * 1.5f) * Time.deltaTime, Space.World);
+    }
+    else if (!reachedTarget)
+    {
+      // Controlled MoveTowards logic
       Vector3 pos = transform.position;
       pos.y = Mathf.MoveTowards(pos.y, targetY, moveSpeed * Time.deltaTime);
       transform.position = pos;
@@ -39,6 +48,7 @@ public class ShipUpgradePickupLv2 : MonoBehaviour
     }
     else
     {
+      // Floating animation once target reached (unchanged)
       Vector3 floatPos = transform.position;
       floatPos.y += Mathf.Sin(Time.time * floatSpeed) * 0.002f;
       transform.position = floatPos;

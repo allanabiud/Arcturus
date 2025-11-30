@@ -5,12 +5,12 @@ using UnityEngine;
 public class BossEnemy : BasicEnemy
 {
   [Header("Boss Settings")]
-  public int bossHealth = 30;
+  public int bossHealth = 50;
   public float bossFireRate = 0.2f;
 
   [Header("Lateral Movement Settings")]
-  public float moveAmplitude = 1.5f;
-  public float moveSpeed = 2f;
+  public float moveAmplitude = 4f;
+  public float moveSpeed = 2.5f;
 
   [Header("Fire Points")]
   public Transform firePoint1; // first shooting point
@@ -19,7 +19,7 @@ public class BossEnemy : BasicEnemy
   private bool canMove = false;
   private Vector3 startPos;
   private float startTimeForMovement;
-
+  private float phaseOffset = 0f;
 
   void Start()
   {
@@ -29,9 +29,33 @@ public class BossEnemy : BasicEnemy
 
     fireRate = bossFireRate;
 
-    // Initialize lateral movement like Level4
+    // Initialize lateral movement
     startPos = transform.position;
     startTimeForMovement = Time.time;
+
+    // Force the fly-in target Y to the top of the screen ---
+    // Get the fly-in component
+    EnemyFlyIn flyIn = GetComponent<EnemyFlyIn>();
+
+    if (flyIn != null)
+    {
+      Camera cam = Camera.main;
+      float camTop = cam.transform.position.y + cam.orthographicSize;
+      float camBottom = cam.transform.position.y - cam.orthographicSize;
+
+      float targetYRatio = 0.85f; // 85% up from the bottom edge
+      float topScreenY = cam.transform.position.y + cam.orthographicSize;
+
+      // Calculate the desired final resting Y position
+      float desiredBossY = camBottom + (2 * cam.orthographicSize * targetYRatio);
+
+      Vector3 newTarget = flyIn.targetPosition;
+      newTarget.y = desiredBossY;
+
+      flyIn.targetPosition = newTarget;
+
+      startPos.y = desiredBossY;
+    }
   }
 
   protected override IEnumerator WaitThenShoot()
@@ -41,8 +65,18 @@ public class BossEnemy : BasicEnemy
 
     // Enable lateral movement after fly-in
     canMove = true;
+
     startPos = transform.position;
+    CalculatePhaseOffset();
+
     startTimeForMovement = Time.time;
+  }
+
+  private void CalculatePhaseOffset()
+  {
+    float normalizedX = Mathf.Clamp((startPos.x - Camera.main.transform.position.x) / moveAmplitude, -1f, 1f);
+
+    phaseOffset = Mathf.Asin(normalizedX);
   }
 
   protected override void Update()
@@ -52,22 +86,22 @@ public class BossEnemy : BasicEnemy
     if (canMove)
     {
       float timeElapsed = Time.time - startTimeForMovement;
-      float offset = Mathf.Sin(timeElapsed * moveSpeed) * moveAmplitude;
 
-      // Tentative new X
-      float newX = startPos.x + offset;
+      float offset = Mathf.Sin(timeElapsed * moveSpeed + phaseOffset) * moveAmplitude;
+
+      float newX = Camera.main.transform.position.x + offset;
 
       // Clamp to camera bounds
-      float padding = 0.5f; // optional, so enemy doesn't touch edges
+      float padding = 0.5f;
       float camHalfWidth = Camera.main.orthographicSize * Camera.main.aspect;
       float minX = Camera.main.transform.position.x - camHalfWidth + padding;
       float maxX = Camera.main.transform.position.x + camHalfWidth - padding;
+
       newX = Mathf.Clamp(newX, minX, maxX);
 
       transform.position = new Vector3(newX, startPos.y, startPos.z);
     }
   }
-
 
   protected override void Shoot()
   {

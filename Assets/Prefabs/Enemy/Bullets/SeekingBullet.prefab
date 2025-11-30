@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3.5
-  rotateSpeed: 60
+  rotateSpeed: 30
   hitEffectPlayer: {fileID: 4690787993360163147, guid: bb8baf57cdacb49689276aa5184f89ea, type: 3}
   hitPlayerSFX: {fileID: 8300000, guid: 3c64e540c2b6ea085a24a95d47e2f0e0, type: 3}
   hitVolume: 1

@@ -166,7 +166,7 @@ MonoBehaviour:
   waves:
   - waveName: One
     enemyTypesToSpawn:
-    - name: Basic
+    - name: BasicEnemy
       prefab: {fileID: 9140977118572251688, guid: 7c8605066ddda3b7f834b69d261e72cc, type: 3}
     totalEnemies: 5
     spawnInterval: 1
@@ -6636,8 +6636,8 @@ PolygonCollider2D:
       - {x: -0.5623208, y: 0.3778599}
       - {x: -0.72872055, y: 0.04477939}
       - {x: -0.7320066, y: -0.31005698}
-      - {x: -0.5700467, y: -0.5998444}
-      - {x: 0.60570896, y: -0.5998443}
+      - {x: -0.563704, y: -0.6315581}
+      - {x: 0.60570896, y: -0.631558}
       - {x: 0.7328332, y: -0.25596935}
       - {x: 0.7191658, y: 0.06074232}
       - {x: 0.58737993, y: 0.33791584}

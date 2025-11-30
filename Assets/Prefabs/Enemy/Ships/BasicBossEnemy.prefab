@@ -4925,7 +4925,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0.02, y: 2.72, z: 0}
-  m_LocalScale: {x: 1.4, y: 1.4, z: 0}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8600161912124760650}
@@ -5120,15 +5120,15 @@ MonoBehaviour:
   shieldDropChance: 0.4
   shieldDropCooldown: 5
   shipUpgradeLv2Prefab: {fileID: 410841050126855258, guid: d61da3ceac9cffe2e9e8149509c0ff94, type: 3}
-  shipUpgradeLv2Chance: 0.08
+  shipUpgradeLv2Chance: 0.1
   shipUpgradeLv3Prefab: {fileID: 1297952474299664971, guid: f3c25eb61a0863f1181980b34055e4d3, type: 3}
-  shipUpgradeLv3Chance: 0.03
+  shipUpgradeLv3Chance: 0.05
   shipUpgradeDropCooldown: 10
   lastShieldDropTime: -999
   audioSource: {fileID: 4789132590881753134}
   shootSFX: {fileID: 8300000, guid: 04dabaead86995ab789d3fb88582bf31, type: 3}
-  bossHealth: 20
-  bossFireRate: 0.25
+  bossHealth: 30
+  bossFireRate: 0.15
   moveAmplitude: 4
   moveSpeed: 2.5
   firePoint1: {fileID: 9050067346840839088}

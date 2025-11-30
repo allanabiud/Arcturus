@@ -6,7 +6,7 @@ public class SeekingBullet : MonoBehaviour
 {
   [Header("Homing Settings")]
   public float speed = 3.5f;          // How fast the bullet moves
-  public float rotateSpeed = 60f;  // Degrees per second
+  public float rotateSpeed = 30f;  // Degrees per second
 
   private Transform player;
   private Rigidbody2D rb;

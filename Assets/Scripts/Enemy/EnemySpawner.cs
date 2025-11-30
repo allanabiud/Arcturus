@@ -327,7 +327,7 @@ public class EnemySpawner : MonoBehaviour
 
     // Special boss waves
     if (waveNum == 5)
-      textToShow = "BOSS INCOMING!";
+      textToShow = "MINI-BOSS INCOMING!";
     else if (waveNum == 10)
       textToShow = "FINAL BOSS!";
     else
